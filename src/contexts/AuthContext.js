@@ -1,9 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-
-import * as ROUTES from "../constants/routes";
 
 const AuthContext = createContext();
 
@@ -13,16 +10,13 @@ export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const navigate = useNavigate();
-
     // Sign in with firebase email and password
     const signIn = async (email, password) => {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
             setUser(res.user);
-            console.log(res.user);
         } catch (err) {
-            console.log(err.message);
+            return { error: err.message };
         }
     } 
 
@@ -30,14 +24,14 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                setUser(user);
                 setIsLoading(false);
-                navigate(ROUTES.ACCOUNT);
             } else {
+                setUser(null);
                 setIsLoading(false);
-                navigate(ROUTES.HOME);
             }
         })
-    }, [user, navigate])
+    }, [user])
 
     return (
         <AuthContext.Provider value={{ user, signIn }}>

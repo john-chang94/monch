@@ -11,7 +11,7 @@ export default function Home() {
             HOME
             <Link to={ROUTES.SIGN_IN}>SIGN IN</Link>
             <br />
-            {user && <p>{user.firstName}</p>}
+            {user && <p>{user.displayName}</p>}
         </div>
     )
 }

@@ -19,10 +19,12 @@ import {
 } from "firebase/firestore";
 
 import Home from "./pages/home/Home";
+import Header from "./components/Header";
 import Register from "./pages/auth/Register";
 import SignIn from "./pages/auth/SignIn";
-import { AuthContextProvider } from "./contexts/AuthContext";
 import Account from "./pages/account/Account";
+
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +127,7 @@ function App() {
   return (
     <div>
       <AuthContextProvider>
+        <Header />
         <Routes>
           <Route path={ROUTES.HOME} element={<Home />} />
           <Route path={ROUTES.REGISTER} element={<Register />} />
