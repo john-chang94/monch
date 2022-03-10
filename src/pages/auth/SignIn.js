@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
+
 import * as ROUTES from "../../constants/routes";
 
 export default function SignIn() {
@@ -9,23 +12,28 @@ export default function SignIn() {
   const [password, setPassword] = useState();
   const [error, setError] = useState(null);
 
-  const { user, signIn } = useAuth();
+  const { activeUser, setActiveUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
-      e.preventDefault();
-      const res = await signIn(email, password);
+    e.preventDefault();
+    try {
+      const signedInUser = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setActiveUser(signedInUser.user);
+      navigate(ROUTES.HOME);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
-      // If sign in error, display message
-      if (res.error) setError(res.error);
-      else navigate(ROUTES.HOME);
-  }
-
-  
   useEffect(() => {
-      // If a user is signed in, do not show this component
-      if (user) navigate(ROUTES.HOME);
-  }, [])
+    // If a user is signed in, do not show this component
+    if (activeUser) navigate(ROUTES.HOME);
+  }, [activeUser]);
 
   return (
     <div>

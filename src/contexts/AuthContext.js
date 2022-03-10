@@ -1,40 +1,30 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { auth } from "../config/firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext); // Custom hook
 
 export const AuthContextProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [activeUser, setActiveUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Sign in with firebase email and password
-    const signIn = async (email, password) => {
-        try {
-            const res = await signInWithEmailAndPassword(auth, email, password);
-            setUser(res.user);
-        } catch (err) {
-            return { error: err.message };
-        }
-    } 
-
-    // Listen to user auth state
+    // Listen to active user auth state
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser(user);
+        onAuthStateChanged(auth, (activeUser) => {
+            if (activeUser) {
+                setActiveUser(activeUser);
                 setIsLoading(false);
             } else {
-                setUser(null);
+                setActiveUser(null);
                 setIsLoading(false);
             }
         })
-    }, [user])
+    }, [activeUser])
 
     return (
-        <AuthContext.Provider value={{ user, signIn }}>
+        <AuthContext.Provider value={{ activeUser, setActiveUser }}>
             {!isLoading && children}    
         </AuthContext.Provider>
     )

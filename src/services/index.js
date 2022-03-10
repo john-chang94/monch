@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 
 export const register = async (user, email, password) => {
@@ -13,4 +13,18 @@ export const register = async (user, email, password) => {
     } catch (err) {
         console.log(err);
     }
+}
+
+// Use getDocs instead of getDoc because we don't have the actual user docId
+export const getUserById = async (userId) => {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("userId", "==", userId));
+    
+    const qSnapshot = await getDocs(q);
+    const [user] = qSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        docId: doc.id // Set doc id for fetched user
+    }));
+
+    return user;
 }

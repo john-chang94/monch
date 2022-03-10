@@ -18,6 +18,11 @@
   background-color:rgba(0, 0, 0, 0.15);
 }
 
+header {
+  height: 50px;
+  background-color: rgb(40, 153, 40);
+}
+
 /* SPACING STYLES */
 
 .m-1 {
