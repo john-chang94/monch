@@ -619,6 +619,10 @@ header {
   background-color: purple;
 }
 
+.link-redirect {
+  color: rgb(0, 110, 255);
+}
+
 /* TEXT STYLES */
 
 .nowrap {
@@ -794,9 +798,8 @@ header {
 /* FORM STYLES */
 
 .form-input {
-  height: 32px;
-  font-size: 15px;
-  padding-left: 2px;
+  height: 28px;
+  font-size: 16px;
   border-radius: 5px;
   box-shadow: 0 4px 7px rgb(237, 237, 237);
   border: 1px solid lightgray;
@@ -1113,6 +1116,9 @@ select {
   }
   .s10-offset-1 {
     grid-column: 2 / span 10;
+  }
+  .container {
+    padding: 8px;
   }
 }
 

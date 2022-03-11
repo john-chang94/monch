@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
@@ -8,8 +8,8 @@ import { auth } from "../../config/firebase";
 import * as ROUTES from "../../constants/routes";
 
 export default function SignIn() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const { activeUser, setActiveUser } = useAuth();
@@ -23,7 +23,9 @@ export default function SignIn() {
         email,
         password
       );
+      // Set firebase user object in context
       setActiveUser(signedInUser.user);
+      // Redirect to home after sign in
       navigate(ROUTES.HOME);
     } catch (err) {
       setError(err.message);
@@ -37,12 +39,34 @@ export default function SignIn() {
 
   return (
     <div>
-      <form onSubmit={handleSignIn}>
-        <input type="email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" onChange={(e) => setPassword(e.target.value)} />
-        <button>Sign In</button>
+      <form onSubmit={handleSignIn} className="flex flex-col align-center">
+        <div className="mb-1 w-90">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            className="form-input"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="mb-1 w-90">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            className="form-input"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button className="btn-med my-4">Sign In</button>
       </form>
       {error && <p className="red">{error}</p>}
+      <div className="text-center">
+        <p>No account?</p>
+        <Link to={ROUTES.REGISTER} className="link-redirect text-no-u pointer">Sign up here</Link>
+      </div>
     </div>
   );
 }

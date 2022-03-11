@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { register } from "../../services";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 import * as ROUTES from "../../constants/routes";
 
@@ -12,6 +14,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
 
+  const { activeUser } = useAuth();
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -27,46 +30,80 @@ export default function Register() {
 
     let user = { firstName, lastName, email };
     await register(user, email, password);
-    
+
     // Redirect to home after registration
     navigate(ROUTES.HOME);
   };
+
+  useEffect(() => {
+    // If a user is signed in, do not show this component
+    if (activeUser) navigate(ROUTES.HOME);
+  }, [activeUser]);
+
   return (
     <div>
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          value={firstName}
-          className=""
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <input
-          type="text"
-          value={lastName}
-          className=""
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        <input
-          type="email"
-          value={email}
-          className=""
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          value={password}
-          className=""
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          value={confirmPassword}
-          className=""
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button>Register</button>
+      <form onSubmit={handleRegister} className="flex flex-col align-center">
+        <div className="flex flex-col mb-1 w-90">
+          <label htmlFor="firstName">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            value={firstName}
+            className="form-input"
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col mb-1 w-90">
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={lastName}
+            className="form-input"
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col mb-1 w-90">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            className="form-input"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col mb-1 w-90">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            className="form-input"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col mb-1 w-90">
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            className="form-input"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+        <button
+          className="btn-med my-4"
+        >
+          Register
+        </button>
       </form>
       {error && <p className="red">{error}</p>}
+      <div className="text-center">
+        <p>Have an account?</p>
+        <Link to={ROUTES.SIGN_IN} className="link-redirect text-no-u pointer">Sign in here</Link>
+      </div>
     </div>
   );
 }

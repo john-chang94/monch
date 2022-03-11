@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { addDoc, getDoc, collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 
 export const register = async (user, email, password) => {
@@ -9,7 +9,11 @@ export const register = async (user, email, password) => {
         // Set new user id in user object
         user.userId = newUser.user.uid;
         // Add new user to firestore
-        await addDoc(collection(db, "users"), user);
+        const addedUser = await addDoc(collection(db, "users"), user);
+        // Set docId in firestore user object
+        await updateDoc(doc(db, "users", addedUser.id), {
+            docId: addedUser.id
+        })
     } catch (err) {
         console.log(err);
     }

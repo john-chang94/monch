@@ -8,7 +8,6 @@ export default function Home() {
         <div>
             HOME
             <br />
-            {activeUser && <p>{activeUser.email}</p>}
         </div>
     )
 }

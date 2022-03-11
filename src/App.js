@@ -128,12 +128,14 @@ function App() {
     <div>
       <AuthContextProvider>
         <Header />
-        <Routes>
-          <Route path={ROUTES.HOME} element={<Home />} />
-          <Route path={ROUTES.REGISTER} element={<Register />} />
-          <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-          <Route path={ROUTES.ACCOUNT} element={<Account />} />
-        </Routes>
+        <div className="container">
+          <Routes>
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.REGISTER} element={<Register />} />
+            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+            <Route path={ROUTES.ACCOUNT} element={<Account />} />
+          </Routes>
+        </div>
       </AuthContextProvider>
     </div>
   );
