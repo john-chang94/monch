@@ -7,19 +7,21 @@ export const RestaurantCard = ({
   totalRatings,
   price,
 }) => (
-  <div className="card m-2">
-    <div className="px-2 py-5">
-      <p>{name}</p>
-      <em>
+  <div className="card my-3">
+    <div className="px-2 py-4">
+      <h3><strong>{name}</strong></h3>
+      <p>
         {categories.map((category, i) => (
-          <span key={i}>
-            {
-              // No comma after the last category
-              i === categories.length - 1 ? category : `${category}, `
-            }
+          <span
+            key={i}
+            // Add spacing for categories except the first one
+            className={`text-3 border-smooth bg-x-light-gray ${i !== 0 && "ml-1"}`}
+            style={{ padding: '1px 3px' }}
+          >
+            {category}
           </span>
         ))}
-      </em>
+      </p>
       <p>
         {renderStars(rating)} ({totalRatings} reviews)
       </p>

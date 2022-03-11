@@ -42,7 +42,7 @@ export default function Register() {
 
   return (
     <div>
-      <form onSubmit={handleRegister} className="flex flex-col align-center">
+      <form onSubmit={handleRegister} className="flex flex-col align-center mt-5">
         <div className="flex flex-col mb-1 w-90">
           <label htmlFor="firstName">First Name</label>
           <input

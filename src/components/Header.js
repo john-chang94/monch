@@ -17,6 +17,7 @@ export default function Header() {
 
   const handleSignOut = () => {
     signOut(auth);
+    setUser(null);
     navigate(ROUTES.HOME);
   };
 
@@ -39,27 +40,23 @@ export default function Header() {
       <div>
         {user ? (
           <div className="flex">
-            <p>Hi, {user.firstName}</p>
+            <p className="mr-2">Hi, {user.firstName}</p>
             <p className="pointer-no-u mx-2" onClick={handleSignOut}>
               Sign Out
             </p>
           </div>
         ) : (
-          // Hide links if user is on either sign in or register page
-          window.location.pathname !== "/signin" &&
-          window.location.pathname !== "/register" && (
-            <div>
-              <Link to={ROUTES.SIGN_IN} className="off-white text-no-u pointer">
-                Sign In
-              </Link>
-              <Link
-                to={ROUTES.REGISTER}
-                className="off-white text-no-u pointer mx-2"
-              >
-                Register
-              </Link>
-            </div>
-          )
+          <div>
+            <Link to={ROUTES.SIGN_IN} className="off-white text-no-u pointer mr-2">
+              Sign In
+            </Link>
+            <Link
+              to={ROUTES.REGISTER}
+              className="off-white text-no-u pointer mx-2"
+            >
+              Register
+            </Link>
+          </div>
         )}
       </div>
     </header>

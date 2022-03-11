@@ -39,7 +39,7 @@ export default function SignIn() {
 
   return (
     <div>
-      <form onSubmit={handleSignIn} className="flex flex-col align-center">
+      <form onSubmit={handleSignIn} className="flex flex-col align-center mt-5">
         <div className="mb-1 w-90">
           <label htmlFor="email">Email</label>
           <input

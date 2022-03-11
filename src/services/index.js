@@ -80,6 +80,17 @@ export const getRestaurants = async () => {
   }
 };
 
+export const getRestaurant = async (docId) => {
+  try {
+    const restaurantRef = doc(db, "restaurants", docId);
+    const restaurantSnap = await getDoc(restaurantRef);
+
+    return restaurantSnap.data();
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 //   const addReview = async (id) => {
 //     let review = {
 //       reviewId: "12347",

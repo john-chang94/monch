@@ -15,6 +15,11 @@ export default function Home() {
         handleFetchData();
     }, [])
     return (
-        <Restaurants restaurants={restaurants} />
+        <div>
+            <div>
+                <p>Featured</p>
+            </div>
+            <Restaurants restaurants={restaurants} />
+        </div>
     )
 }
