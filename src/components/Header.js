@@ -37,7 +37,7 @@ export default function Header() {
         Monch!
       </Link>
       <div>
-        {activeUser && user ? (
+        {user ? (
           <div className="flex">
             <p>Hi, {user.firstName}</p>
             <p className="pointer-no-u mx-2" onClick={handleSignOut}>

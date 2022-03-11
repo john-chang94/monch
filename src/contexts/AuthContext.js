@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext); // Custom hook
 
 export const AuthContextProvider = ({ children }) => {
-    const [activeUser, setActiveUser] = useState(null); // Firebase user object, not user doc
+    const [activeUser, setActiveUser] = useState(null); // Firebase auth user object, not user doc
     const [isLoading, setIsLoading] = useState(true);
 
     // Listen to active user auth state

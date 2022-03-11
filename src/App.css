@@ -945,6 +945,27 @@ select {
   box-shadow: 0 4px 8px rgb(220, 220, 220);
 }
 
+/* CARD STYLES */
+
+.card {
+  border: solid 1px gray;
+  border-radius: 3px;
+  
+  /* Target desired property to be animated */
+  transition: box-shadow .5s ease;
+  /* transition: transform .5s ease; */
+}
+
+.card:hover {
+  cursor: pointer;
+  /* Desired animated effect (box-shadow) */
+  box-shadow: 1px 3px 5px rgb(181, 181, 181);
+  /* transform: scale(1.03); */
+
+  /* Old way, no transition during ease out (below) */
+  /* transition: box-shadow .5s ease; */
+}
+
 /* GRID STYLES */
 
 .grid {
