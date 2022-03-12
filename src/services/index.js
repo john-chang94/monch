@@ -1,4 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
   getDoc,
@@ -8,8 +9,10 @@ import {
   getDocs,
   doc,
   updateDoc,
+  arrayUnion
 } from "firebase/firestore";
-import { auth, db } from "../config/firebase";
+
+import { auth, db, storage } from "../config/firebase";
 
 export const register = async (user, email, password) => {
   try {
@@ -80,9 +83,9 @@ export const getRestaurants = async () => {
   }
 };
 
-export const getRestaurant = async (docId) => {
+export const getRestaurant = async (restaurantId) => {
   try {
-    const restaurantRef = doc(db, "restaurants", docId);
+    const restaurantRef = doc(db, "restaurants", restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
 
     return restaurantSnap.data();
@@ -90,6 +93,44 @@ export const getRestaurant = async (docId) => {
     console.log(err.message);
   }
 }
+
+export const addReview = async (userDocId, restaurantId, reviewBody, images) => {
+  try {
+    const reviewToAdd = {
+      ...reviewBody,
+      userDocId,
+      restaurantId
+    }
+
+    const addedReview = await addDoc(collection(db, "reviews"), reviewToAdd);
+
+    if (images) {
+      for (let i = 0; i < images.length; i++) {
+        const reviewImagesRef = ref(storage, `images/reviews/${images[i].name}`);
+
+        uploadBytes(reviewImagesRef, images[i])
+          .then(async (snapshot) => {
+            const url = await getDownloadURL(snapshot.ref);
+            // NEED TO UPDATE REVIEW DOC AND ADD URL
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      }
+    }
+
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+// export const addReviewImage = async (reviewId, image) => {
+//   try {
+    
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// }
 
 //   const addReview = async (id) => {
 //     let review = {

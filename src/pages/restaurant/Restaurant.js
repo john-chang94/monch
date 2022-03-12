@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import { getRestaurant } from "../../services";
 
-import { renderStars } from "../../helpers/starsHelper";
+import { RestaurantDetails } from "./RestaurantDetails";
+import { RestaurantImages } from "./RestaurantImages";
+import { AddReview } from "./AddReview";
 
 export default function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const { restaurantId } = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleFetchData = async () => {
@@ -15,29 +19,13 @@ export default function Restaurant() {
     };
 
     handleFetchData();
-  }, []);
+  }, [restaurantId]);
 
-  return (
-    restaurant && (
+  return restaurant && (
       <div>
-        <h3>{restaurant.name}</h3>
-        <p className="text-3">
-          {restaurant.categories.map((category, i) => (
-            <em key={i}>
-              {
-                // No comma after the last category
-                i === restaurant.categories.length - 1
-                  ? category
-                  : `${category}, `
-              }
-            </em>
-          ))}
-        </p>
-        <p>
-          {renderStars(restaurant.rating)} ({restaurant.totalRatings} reviews)
-        </p>
-        <p>{"$".repeat(parseInt(restaurant.price))}</p>
+          <RestaurantDetails restaurant={restaurant} />
+          {/* <RestaurantImages /> */}
+          <AddReview userDocId={user.userId} restaurantId={restaurantId} />
       </div>
-    )
-  );
+  )
 }

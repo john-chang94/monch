@@ -23,7 +23,7 @@ export default function SignIn() {
         email,
         password
       );
-      // Set firebase user object in context
+      // Set firebase auth user in context
       setActiveUser(signedInUser.user);
       // Redirect to home after sign in
       navigate(ROUTES.HOME);
