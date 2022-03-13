@@ -1,5 +1,5 @@
 import React from "react";
-import { renderStars } from "../../helpers/starsHelper";
+import { renderStars } from "../../helpers/renderStars";
 
 export const RestaurantDetails = ({ restaurant }) => (
   <>

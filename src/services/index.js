@@ -51,7 +51,7 @@ export const getUserById = async (userId) => {
 //     const docs = await getDocs(collection(db, "restaurants"));
 //     docs.forEach(async (res) => {
 //       await updateDoc(doc(db, "restaurants", res.id), {
-//         totalRatings: 0,
+//         rating: 0,
 //       });
 //     });
 //     //   for (let i = 0; i < data.length; i++) {
@@ -85,36 +85,85 @@ export const getRestaurants = async () => {
 
 export const getRestaurant = async (restaurantId) => {
   try {
+    // Get restaurant
     const restaurantRef = doc(db, "restaurants", restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
 
-    return restaurantSnap.data();
+    // Get restaurant reviews to calculate the average rating
+    let ratingSum = 0;
+    let count = 0;
+    const reviewsRef = collection(db, "reviews");
+    const q = query(reviewsRef, where("restaurantId", "==", restaurantId));
+    const querySnapshot = await getDocs(q);
+    // Get the total ratings and divisor ready for finding the average
+    querySnapshot.forEach((doc) => {
+      ratingSum = ratingSum + doc.data().rating
+      count = count + 1;
+    })
+    // Calculate the average rating
+    const rating = ratingSum / count;
+    // Combine restaurant and rating to return
+    const restaurant = {
+      ...restaurantSnap.data(),
+      rating: rating
+    }
+
+    return restaurant;
   } catch (err) {
     console.log(err.message);
   }
 }
 
-export const addReview = async (userDocId, restaurantId, reviewBody, images) => {
+export const getReviews = async (restaurantId) => {
   try {
-    const reviewToAdd = {
-      ...reviewBody,
-      userDocId,
-      restaurantId
-    }
+    let reviews = [];
+    const reviewsRef = collection(db, "reviews");
+    const q = query(reviewsRef, where("restaurantId", "==", restaurantId));
+    const querySnapshot = await getDocs(q);
+    // Add each review snapshot into reviews array
+    querySnapshot.forEach((doc) => {
+      reviews.push(doc.data());
+    })
 
-    const addedReview = await addDoc(collection(db, "reviews"), reviewToAdd);
+    console.log(reviews)
+    return reviews;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 
+export const addReview = async (review, images) => {
+  try {
+    // Add review to firestore
+    const addedReview = await addDoc(collection(db, "reviews"), review);
+    // Update restaurant total ratings
+    const restaurantRef = doc(db, "restaurants", review.restaurantId);
+    const restaurantSnap = await getDoc(restaurantRef);
+    const restaurantDoc = restaurantSnap.data();
+    await updateDoc(restaurantRef, {
+      totalRatings: restaurantDoc.totalRatings + 1
+    })
+    
+    // Run if review has any images
     if (images) {
+      // Get newly added review doc id
+      const reviewRef = doc(db, "reviews", addedReview.id);
+      // Repeat upload and update review for each image provided
       for (let i = 0; i < images.length; i++) {
+        // Make a ref to the image path w/ file name to upload
         const reviewImagesRef = ref(storage, `images/reviews/${images[i].name}`);
-
+        // Upload image file to the review image ref
         uploadBytes(reviewImagesRef, images[i])
           .then(async (snapshot) => {
+            // Get uploaded image url
             const url = await getDownloadURL(snapshot.ref);
-            // NEED TO UPDATE REVIEW DOC AND ADD URL
+            // Update review and add image url to images array
+            await updateDoc(reviewRef, {
+              images: arrayUnion(url)
+            })
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.message);
           })
       }
     }

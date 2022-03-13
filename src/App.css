@@ -14,9 +14,10 @@
   text-decoration: none;
 }
 
-.hovered:hover {
+/* .hovered:hover {
   background-color:rgba(0, 0, 0, 0.15);
-}
+  opacity: .85;
+} */
 
 header {
   height: 50px;
@@ -507,12 +508,6 @@ header {
 .text-right {
   text-align: right;
 }
-.text-b {
-  font-weight: bold;
-}
-.text-i {
-  font-style: italic;
-}
 .text-u {
   text-decoration: underline;
 }
@@ -942,7 +937,7 @@ select {
     grid-column: 2 / span 10;
   }
   .container {
-    padding: 8px;
+    padding: 1% 4%;
   }
 }
 

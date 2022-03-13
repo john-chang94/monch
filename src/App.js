@@ -1,4 +1,4 @@
-// import React from "react";
+import "./Colors.css";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import * as ROUTES from "./constants/routes";
