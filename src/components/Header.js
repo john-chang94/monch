@@ -21,7 +21,7 @@ export default function Header() {
   };
 
   return (
-    <header className="flex justify-between align-center">
+    <header className="flex justify-between align-center bg-green-darken-3">
       <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-7 ml-2">
         Monch!
       </Link>
@@ -35,12 +35,12 @@ export default function Header() {
           </div>
         ) : (
           <div>
-            <Link to={ROUTES.SIGN_IN} className="grey-lighten-4 text-no-u pointer mr-2">
+            <Link to={ROUTES.SIGN_IN} className="grey-lighten-4 text-no-u pointer-no-u mr-2">
               Sign In
             </Link>
             <Link
               to={ROUTES.REGISTER}
-              className="grey-lighten-4 text-no-u pointer mx-2"
+              className="grey-lighten-4 text-no-u pointer-no-u mx-4"
             >
               Register
             </Link>

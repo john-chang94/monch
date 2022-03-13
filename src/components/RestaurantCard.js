@@ -15,7 +15,7 @@ export const RestaurantCard = ({
           <span
             key={i}
             // Add spacing for categories except the first one
-            className={`text-3 border-smooth bg-x-light-gray ${i !== 0 && "ml-1"}`}
+            className={`text-3 border-smooth bg-grey-lighten-3 ${i !== 0 && "ml-1"}`}
             style={{ padding: '1px 3px' }}
           >
             {category}

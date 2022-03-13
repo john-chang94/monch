@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addReview } from "../../services";
 
-export const AddReview = ({ user, restaurantId }) => {
+export const AddReview = ({ user, restaurantId, handleFetchData }) => {
   const [details, setDetails] = useState("");
   const [images, setImages] = useState([]);
   const [stars, setStars] = useState([]);
@@ -56,6 +56,7 @@ export const AddReview = ({ user, restaurantId }) => {
       lastName: user.lastName
     };
     await addReview(review, images);
+    handleFetchData();
   };
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export const AddReview = ({ user, restaurantId }) => {
   }, []);
 
   return (
-    <div className="w-100 bg-x-light-gray">
+    <div className="w-100 bg-grey-lighten-3">
       <div className="p-2">
         <p>Leave a review</p>
         <p>{stars}</p>
@@ -88,10 +89,10 @@ export const AddReview = ({ user, restaurantId }) => {
         </div>
         <div>
           <button
-            className="btn-med mt-4 bg-teal-lighten-2 pointer-no-u"
+            className="btn-med mt-4 grey-lighten-4 bg-teal-lighten-2 pointer-no-u"
             onClick={handleSubmit}
           >
-            Submit
+            SUBMIT
           </button>
         </div>
       </div>

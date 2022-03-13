@@ -65,7 +65,7 @@ export default function SignIn() {
       {error && <p className="red">{error}</p>}
       <div className="text-center">
         <p>No account?</p>
-        <Link to={ROUTES.REGISTER} className="link-redirect text-no-u pointer">Sign up here</Link>
+        <Link to={ROUTES.REGISTER} className="blue-darken-2 text-no-u pointer">Sign up here</Link>
       </div>
     </div>
   );

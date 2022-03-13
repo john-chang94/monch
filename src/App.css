@@ -21,7 +21,6 @@
 
 header {
   height: 50px;
-  background-color: rgb(40, 153, 40);
 }
 
 .container {
@@ -402,96 +401,6 @@ header {
 }
 .pb-8 {
   padding-bottom: 40px;
-}
-
-/* COLOR STYLES */
-
-.white {
-  color: white;
-}
-.off-white {
-  color: rgb(247, 247, 247);
-}
-.black {
-  color: black;
-}
-.gray {
-  color: gray;
-}
-.light-gray {
-  color: rgb(210, 210, 210);
-}
-.dark-gray {
-  color: rgb(79, 79, 79);
-}
-.red {
-  color: red;
-}
-.orange {
-  color: orange;
-}
-.yellow {
-  color: yellow;
-}
-.green {
-  color: green;
-}
-.blue {
-  color: blue;
-}
-.purple {
-  color: purple;
-}
-.bg-white {
-  background-color: white;
-}
-.bg-black {
-  background-color: black;
-}
-.bg-gray {
-  background-color: rgb(160, 160, 160);
-}
-.bg-light-gray {
-  background-color: rgb(200, 200, 200);
-}
-.bg-x-light-gray {
-  background-color: rgb(240, 240, 240);
-}
-.bg-dark-gray {
-  background-color: rgb(130, 130, 130);
-}
-.bg-light-gray-hovered:hover {
-  background-color: rgb(200, 200, 200);
-}
-.bg-x-light-gray-hovered:hover {
-  background-color: rgb(230, 230, 230);
-}
-.bg-red {
-  background-color: red;
-}
-.bg-orange {
-  background-color: orange;
-}
-.bg-yellow {
-  background-color: yellow;
-}
-.bg-green {
-  background-color: green;
-}
-.bg-x-light-green {
-  background-color: rgba(181, 238, 141, 0.822);
-}
-.bg-blue {
-  background-color: blue;
-}
-.bg-light-blue {
-  background-color: lightblue;
-}
-.bg-purple {
-  background-color: purple;
-}
-.link-redirect {
-  color: rgb(0, 110, 255);
 }
 
 /* TEXT STYLES */

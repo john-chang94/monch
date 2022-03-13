@@ -1525,3 +1525,15 @@
 .bg-blue-grey-darken-4 {
     background-color: #263238
 }
+.white {
+    color: white;
+}
+.black {
+    color: black;
+}
+.bg-white {
+    background-color: white;
+}
+.bg-black {
+    background-color: black;
+}

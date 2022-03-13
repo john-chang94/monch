@@ -14,23 +14,23 @@ export default function Restaurant() {
   const { restaurantId } = useParams();
   const { user } = useAuth();
 
+  const handleFetchData = async () => {
+    const restaurant = await getRestaurant(restaurantId);
+    const reviews = await getReviews(restaurantId);
+    setRestaurant(restaurant);
+    setReviews(reviews);
+  };
+  
   useEffect(() => {
-    const handleFetchData = async () => {
-      const restaurant = await getRestaurant(restaurantId);
-      const reviews = await getReviews(restaurantId);
-      setRestaurant(restaurant);
-      setReviews(reviews);
-    };
-
     handleFetchData();
-  }, [restaurantId]);
+  }, []);
 
   return (
     restaurant && (
       <div>
         <RestaurantDetails restaurant={restaurant} />
         {/* <RestaurantImages /> */}
-        <AddReview user={user} restaurantId={restaurantId} />
+        <AddReview user={user} restaurantId={restaurantId} handleFetchData={handleFetchData} />
         <Reviews
           reviews={reviews}
         />

@@ -125,7 +125,6 @@ export const getReviews = async (restaurantId) => {
       reviews.push(doc.data());
     })
 
-    console.log(reviews)
     return reviews;
   } catch (err) {
     console.log(err.message);
