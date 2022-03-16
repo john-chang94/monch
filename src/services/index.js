@@ -156,7 +156,7 @@ export const addReview = async (review, images) => {
           .then(async (snapshot) => {
             // Get uploaded image url
             const url = await getDownloadURL(snapshot.ref);
-            // Update review and add image url to images array
+            // Add image url to images array
             await updateDoc(reviewRef, {
               images: arrayUnion(url)
             })

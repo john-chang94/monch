@@ -11,16 +11,28 @@ import { Reviews } from "../../components/Reviews";
 export default function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [userHasReview, setUserHasReview] = useState(false);
   const { restaurantId } = useParams();
   const { user } = useAuth();
 
   const handleFetchData = async () => {
     const restaurant = await getRestaurant(restaurantId);
     const reviews = await getReviews(restaurantId);
+
+    // Check if signed in user posted a review for the restaurant
+    if (user) {
+      const hasReview = reviews.filter((review) => {
+        return user.userId === review.userId;
+      })
+      if (hasReview.length) {
+        setUserHasReview(true);
+      }
+    }
+
     setRestaurant(restaurant);
     setReviews(reviews);
   };
-  
+
   useEffect(() => {
     handleFetchData();
   }, []);
@@ -30,10 +42,13 @@ export default function Restaurant() {
       <div>
         <RestaurantDetails restaurant={restaurant} />
         {/* <RestaurantImages /> */}
-        <AddReview user={user} restaurantId={restaurantId} handleFetchData={handleFetchData} />
-        <Reviews
-          reviews={reviews}
+        <AddReview
+          user={user}
+          restaurantId={restaurantId}
+          userHasReview={userHasReview}
+          handleFetchData={handleFetchData}
         />
+        <Reviews reviews={reviews} />
       </div>
     )
   );

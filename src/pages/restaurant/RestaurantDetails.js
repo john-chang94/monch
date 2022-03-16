@@ -15,7 +15,8 @@ export const RestaurantDetails = ({ restaurant }) => (
       ))}
     </p>
     <p>
-      {renderStars(restaurant.rating)} ({restaurant.totalRatings} reviews)
+      {renderStars(restaurant.rating)}
+      {` (${restaurant.totalRatings} ${restaurant.totalRatings === 1 ? "review" : "reviews"})`}
     </p>
     <p>{"$".repeat(parseInt(restaurant.price))}</p>
   </>

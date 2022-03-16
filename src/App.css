@@ -14,10 +14,10 @@
   text-decoration: none;
 }
 
-/* .hovered:hover {
+.hovered:hover {
   background-color:rgba(0, 0, 0, 0.15);
-  opacity: .85;
-} */
+  /* opacity: .85; */
+}
 
 header {
   height: 50px;
@@ -30,6 +30,10 @@ header {
 
 .add-review-details {
   height: 60px;
+}
+
+.user-review-img {
+  height: 50px;
 }
 
 /* SPACING STYLES */

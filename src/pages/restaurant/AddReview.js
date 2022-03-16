@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { addReview } from "../../services";
 
-export const AddReview = ({ user, restaurantId, handleFetchData }) => {
+import * as ROUTES from "../../constants/routes";
+
+export const AddReview = ({
+  user,
+  restaurantId,
+  userHasReview,
+  handleFetchData,
+}) => {
   const [details, setDetails] = useState("");
   const [images, setImages] = useState([]);
   const [stars, setStars] = useState([]);
@@ -26,7 +34,7 @@ export const AddReview = ({ user, restaurantId, handleFetchData }) => {
       );
     }
 
-    setRating((starIndex + 1)); // Rating must be 1-5
+    setRating(starIndex + 1); // Rating must be 1-5
     setStars(stars);
   };
 
@@ -53,10 +61,20 @@ export const AddReview = ({ user, restaurantId, handleFetchData }) => {
       restaurantId,
       userId: user.userId,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
     };
+
+    // Add empty images array to body if no images
+    if (!images.length) {
+      review.images = [];
+    }
+
     await addReview(review, images);
     handleFetchData();
+    setDetails("");
+    setRating("");
+    setImages([]);
+    renderEmptyStars();
   };
 
   useEffect(() => {
@@ -66,36 +84,63 @@ export const AddReview = ({ user, restaurantId, handleFetchData }) => {
 
   return (
     <div className="w-100 bg-grey-lighten-3">
-      <div className="p-2">
-        <p>Leave a review</p>
-        <p>{stars}</p>
-        <div className="my-1">
-          <label htmlFor="details">Details</label>
-          <textarea
-            name="details"
-            value={details}
-            className="add-review-details"
-            onChange={(e) => setDetails(e.target.value)}
-          />
+      {user ? (
+        <div className="p-2">
+          {userHasReview ? (
+            <>
+              <p>
+                You already posted a review.
+                <br />
+                <Link to={`/account/${user.userId}`} className="text-no-u blue-darken-2">
+                  Manage your reviews here
+                </Link>
+              </p>
+            </>
+          ) : (
+            <>
+              <p>Leave a review</p>
+              <p>{stars}</p>
+            </>
+          )}
+          <div className="my-1">
+            <label htmlFor="details">Details</label>
+            <textarea
+              name="details"
+              value={details}
+              className="add-review-details"
+              onChange={(e) => setDetails(e.target.value)}
+              disabled={userHasReview}
+            />
+          </div>
+          <div>
+            <p>Add images (optional)</p>
+            <input
+              type="file"
+              name="images"
+              multiple
+              onChange={(e) => setImages(e.target.files)}
+              disabled={userHasReview}
+            />
+          </div>
+          {!userHasReview && (
+            <div>
+              <button
+                className="btn-med mt-4 grey-lighten-4 pointer-no-u"
+                onClick={handleSubmit}
+              >
+                SUBMIT
+              </button>
+            </div>
+          )}
         </div>
-        <div>
-          <p>Add images (optional)</p>
-          <input
-            type="file"
-            name="images"
-            multiple
-            onChange={(e) => setImages(e.target.files)}
-          />
-        </div>
-        <div>
-          <button
-            className="btn-med mt-4 grey-lighten-4 bg-teal-lighten-2 pointer-no-u"
-            onClick={handleSubmit}
-          >
-            SUBMIT
-          </button>
-        </div>
-      </div>
+      ) : (
+        <p className="py-5">
+          <Link to={ROUTES.SIGN_IN} className="text-no-u blue-darken-2">
+            Sign in
+          </Link>{" "}
+          to leave a review
+        </p>
+      )}
     </div>
   );
 };
