@@ -31,9 +31,16 @@ export default function Restaurant() {
       }
     }
 
+    if (reviewImages) {
+      let images = [];
+      for (let i = 0; i < reviewImages.length; i++) {
+        images.push({ original: reviewImages[i].url, thumbnail: reviewImages[i].url })
+      }
+      setReviewImages(images);
+    }
+
     setRestaurant(restaurant);
     setReviews(reviews);
-    setReviewImages(reviewImages);
   };
 
   useEffect(() => {
@@ -43,8 +50,10 @@ export default function Restaurant() {
   return (
     restaurant && (
       <div>
-        <RestaurantDetails restaurant={restaurant} reviewImages={reviewImages} />
-        {/* <RestaurantImages /> */}
+        <RestaurantDetails restaurant={restaurant} />
+        <hr className="my-5" />
+        <RestaurantImages reviewImages={reviewImages} />
+        <hr className="my-5" />
         <AddReview
           user={user}
           restaurantId={restaurantId}

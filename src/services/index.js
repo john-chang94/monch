@@ -142,7 +142,6 @@ export const getRestaurantReviewImages = async (restaurantId) => {
     querySnapshot.forEach((doc) => {
       images.push(doc.data());
     })
-    console.log(images)
 
     return images;
   } catch (err) {

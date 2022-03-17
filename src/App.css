@@ -21,11 +21,11 @@
 
 header {
   height: 50px;
+  padding: 0 4%;
 }
 
 .container {
-  padding-left: 10%;
-  padding-right: 10%;
+  padding: 5px 4%;
 }
 
 .add-review-details {
@@ -34,6 +34,14 @@ header {
 
 .user-review-img {
   height: 50px;
+}
+
+.restaurant-img {
+  height: 150px;
+}
+
+.img-gallery {
+  width: 50%;
 }
 
 /* SPACING STYLES */
@@ -804,6 +812,9 @@ select {
   .m8-offset-2 {
     grid-column: 3 / span 8;
   }
+  .img-gallery {
+    width: 70%;
+  }
 }
 
 @media (max-width: 740px) {
@@ -851,6 +862,9 @@ select {
   }
   .container {
     padding: 1% 4%;
+  }
+  .img-gallery {
+    width: 100%;
   }
 }
 

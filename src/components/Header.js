@@ -22,25 +22,25 @@ export default function Header() {
 
   return (
     <header className="flex justify-between align-center bg-green-darken-3">
-      <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-7 ml-2">
+      <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-7">
         Monch!
       </Link>
       <div>
         {user ? (
           <div className="flex">
-            <p className="mr-2 grey-lighten-4">Hi, {user.firstName}</p>
-            <p className="pointer-no-u mx-2 grey-lighten-4" onClick={handleSignOut}>
+            <p className="mr-5 grey-lighten-4">Hi, {user.firstName}</p>
+            <p className="pointer-no-u grey-lighten-4" onClick={handleSignOut}>
               Sign Out
             </p>
           </div>
         ) : (
           <div>
-            <Link to={ROUTES.SIGN_IN} className="grey-lighten-4 text-no-u pointer-no-u mr-2">
+            <Link to={ROUTES.SIGN_IN} className="grey-lighten-4 text-no-u pointer-no-u mr-5">
               Sign In
             </Link>
             <Link
               to={ROUTES.REGISTER}
-              className="grey-lighten-4 text-no-u pointer-no-u mx-4"
+              className="grey-lighten-4 text-no-u pointer-no-u"
             >
               Register
             </Link>
