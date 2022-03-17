@@ -8,12 +8,13 @@ export const Reviews = ({ reviews }) => (
                 <p>{renderStars(review.rating)}</p>
                 <p>{review.details}</p>
                 <br />
-                {review.images.length > 0 && review.images.map((image, image_i) => (
+                {review.images && review.images.map((image, image_i) => (
                     <div key={image_i}>
                         <img src={image} alt="user review" className="user-review-img" />
                     </div>
                 ))}
                 <p>Reviewer: {review.firstName} {review.lastName}</p>
+                <p>Date: {new Date(review.date).toLocaleDateString()}</p>
             </div>
         ))}
     </div>

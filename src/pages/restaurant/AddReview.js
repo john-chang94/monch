@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { addReview } from "../../services";
 
+import { SpinnerCircular } from "spinners-react";
+
 import * as ROUTES from "../../constants/routes";
 
 export const AddReview = ({
@@ -14,10 +16,11 @@ export const AddReview = ({
   const [images, setImages] = useState([]);
   const [stars, setStars] = useState([]);
   const [rating, setRating] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
-    // Font Awesome & Materialize classes for filled and empty stars
+    // Font Awesome for filled and empty stars
     const filled = "fas fa-star green pointer";
     const empty = "far fa-star green pointer";
     let stars = [];
@@ -55,6 +58,7 @@ export const AddReview = ({
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const review = {
       rating,
       details,
@@ -62,19 +66,19 @@ export const AddReview = ({
       userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
+      date: Date.now()
     };
-
-    // Add empty images array to body if no images
-    if (!images.length) {
-      review.images = [];
-    }
-
+    
     await addReview(review, images);
-    handleFetchData();
-    setDetails("");
-    setRating("");
-    setImages([]);
-    renderEmptyStars();
+
+    setTimeout(() => {
+      handleFetchData();
+      setDetails("");
+      setRating("");
+      setImages([]);
+      renderEmptyStars();
+      setIsSubmitting(false);
+    }, 1200);
   };
 
   useEffect(() => {
@@ -122,11 +126,18 @@ export const AddReview = ({
               disabled={userHasReview}
             />
           </div>
-          {!userHasReview && (
+          {isSubmitting ? (
+            <div className="mt-3">
+              <SpinnerCircular
+                color="#36ad47"
+              />
+            </div>
+          ) : (
             <div>
-              <button
-                className="btn-med mt-4 grey-lighten-4 pointer-no-u"
+            <button
+                className={`btn-med mt-3 ${!userHasReview && "grey-lighten-4 bg-teal pointer-no-u"}`}
                 onClick={handleSubmit}
+                disabled={userHasReview}
               >
                 SUBMIT
               </button>

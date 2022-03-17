@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { getRestaurant, getReviews } from "../../services";
+import { getRestaurant, getReviews, getRestaurantReviewImages } from "../../services";
 
 import { RestaurantDetails } from "./RestaurantDetails";
 import { RestaurantImages } from "./RestaurantImages";
@@ -11,6 +11,7 @@ import { Reviews } from "../../components/Reviews";
 export default function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [reviewImages, setReviewImages] = useState([]);
   const [userHasReview, setUserHasReview] = useState(false);
   const { restaurantId } = useParams();
   const { user } = useAuth();
@@ -18,6 +19,7 @@ export default function Restaurant() {
   const handleFetchData = async () => {
     const restaurant = await getRestaurant(restaurantId);
     const reviews = await getReviews(restaurantId);
+    const reviewImages = await getRestaurantReviewImages(restaurantId);
 
     // Check if signed in user posted a review for the restaurant
     if (user) {
@@ -31,6 +33,7 @@ export default function Restaurant() {
 
     setRestaurant(restaurant);
     setReviews(reviews);
+    setReviewImages(reviewImages);
   };
 
   useEffect(() => {
@@ -40,7 +43,7 @@ export default function Restaurant() {
   return (
     restaurant && (
       <div>
-        <RestaurantDetails restaurant={restaurant} />
+        <RestaurantDetails restaurant={restaurant} reviewImages={reviewImages} />
         {/* <RestaurantImages /> */}
         <AddReview
           user={user}
