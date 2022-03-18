@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { getRestaurant, getReviews, getRestaurantReviewImages } from "../../services";
+import {
+  getRestaurant,
+  getReviews,
+  getRestaurantReviewImages,
+} from "../../services";
 
 import { RestaurantDetails } from "./RestaurantDetails";
 import { RestaurantImages } from "./RestaurantImages";
 import { AddReview } from "./AddReview";
 import { Reviews } from "../../components/Reviews";
 
+import { SpinnerCircular } from "spinners-react";
+
 export default function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [reviewImages, setReviewImages] = useState([]);
   const [userHasReview, setUserHasReview] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { restaurantId } = useParams();
   const { user } = useAuth();
 
@@ -25,7 +33,7 @@ export default function Restaurant() {
     if (user) {
       const hasReview = reviews.filter((review) => {
         return user.userId === review.userId;
-      })
+      });
       if (hasReview.length) {
         setUserHasReview(true);
       }
@@ -34,34 +42,41 @@ export default function Restaurant() {
     if (reviewImages) {
       let images = [];
       for (let i = 0; i < reviewImages.length; i++) {
-        images.push({ original: reviewImages[i].url, thumbnail: reviewImages[i].url })
+        images.push({
+          original: reviewImages[i].url,
+          thumbnail: reviewImages[i].url,
+        });
       }
       setReviewImages(images);
     }
 
     setRestaurant(restaurant);
     setReviews(reviews);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     handleFetchData();
   }, []);
 
-  return (
-    restaurant && (
-      <div>
-        <RestaurantDetails restaurant={restaurant} />
-        <hr className="my-5" />
-        <RestaurantImages reviewImages={reviewImages} />
-        <hr className="my-5" />
-        <AddReview
-          user={user}
-          restaurantId={restaurantId}
-          userHasReview={userHasReview}
-          handleFetchData={handleFetchData}
-        />
-        <Reviews reviews={reviews} />
-      </div>
-    )
+  return isLoading ? (
+    <div className="mt-5 text-center">
+      <SpinnerCircular color="#36ad47" size={80} />
+    </div>
+  ) : (
+    <div>
+      <RestaurantDetails restaurant={restaurant} />
+      <hr className="my-5" />
+      <RestaurantImages reviewImages={reviewImages} />
+      <hr className="my-5" />
+      <AddReview
+        user={user}
+        restaurantId={restaurantId}
+        userHasReview={userHasReview}
+        handleFetchData={handleFetchData}
+      />
+      <hr className="my-5" />
+      <Reviews reviews={reviews} />
+    </div>
   );
 }

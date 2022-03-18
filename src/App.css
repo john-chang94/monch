@@ -21,11 +21,15 @@
 
 header {
   height: 50px;
-  padding: 0 4%;
+  padding: 0 10%;
+}
+
+.header-initials {
+  padding: 6px;
 }
 
 .container {
-  padding: 5px 4%;
+  padding: 5px 10%;
 }
 
 .add-review-details {
@@ -42,6 +46,13 @@ header {
 
 .img-gallery {
   width: 50%;
+}
+
+.account-tabs {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  margin: 15px 0;
 }
 
 /* SPACING STYLES */
@@ -669,6 +680,9 @@ select {
 .box-shadow {
   box-shadow: 0 4px 8px rgb(220, 220, 220);
 }
+.border-round {
+  border-radius: 50%;
+}
 
 /* CARD STYLES */
 
@@ -862,6 +876,9 @@ select {
   }
   .container {
     padding: 1% 4%;
+  }
+  header {
+    padding: 0 4%;
   }
   .img-gallery {
     width: 100%;

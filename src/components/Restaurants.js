@@ -8,8 +8,8 @@ export default function Restaurants({ restaurants }) {
     <div>
       {restaurants &&
         restaurants.map(
-          ({ id, name, categories, rating, totalRatings, price }, i) => (
-            <Link to={`/restaurants/${id}`} key={i} className="black text-no-u">
+          ({ docId, name, categories, rating, totalRatings, price }, i) => (
+            <Link to={`/restaurants/${docId}`} key={i} className="black text-no-u">
               <RestaurantCard
                 name={name}
                 categories={categories}

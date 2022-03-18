@@ -41,12 +41,7 @@ export const register = async (user, email, password) => {
     // Set new user id in user object
     user.userId = newUser.user.uid;
     // Add new user to firestore
-    const addedUser = await addDoc(collection(db, "users"), user);
-    // Set docId in firestore user object
-    // MIGHT REMOVE, REFER TO getRestaurants
-    await updateDoc(doc(db, "users", addedUser.id), {
-      docId: addedUser.id,
-    });
+    await addDoc(collection(db, "users"), user);
   } catch (err) {
     console.log(err);
   }
@@ -60,6 +55,7 @@ export const getUserById = async (userId) => {
   const qSnapshot = await getDocs(q);
   // Destructure [user] because it's in another array
   const [user] = qSnapshot.docs.map((doc) => ({
+    docId: doc.id,
     ...doc.data(),
   }));
 
@@ -91,7 +87,7 @@ export const getRestaurants = async () => {
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       let obj = {
-        id: doc.id,
+        docId: doc.id,
         ...doc.data(),
       };
       restaurants.push(obj);

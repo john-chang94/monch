@@ -27,15 +27,28 @@ export default function Header() {
       </Link>
       <div>
         {user ? (
-          <div className="flex">
-            <p className="mr-5">Hi, {user.firstName}</p>
-            <p className="pointer-no-u" onClick={handleSignOut}>
-              Sign Out
-            </p>
+          <div className="flex align-center">
+            <Link
+              to={`/account/${user.userId}`}
+              className="mr-4 grey-lighten-4 text-no-u border-round border-solid-1"
+            >
+              <p className="header-initials">
+                {user.firstName[0]}
+                {user.lastName[0]}
+              </p>
+            </Link>
+            <div>
+              <p className="pointer-no-u" onClick={handleSignOut}>
+                Sign Out
+              </p>
+            </div>
           </div>
         ) : (
           <div>
-            <Link to={ROUTES.SIGN_IN} className="grey-lighten-4 text-no-u pointer-no-u mr-5">
+            <Link
+              to={ROUTES.SIGN_IN}
+              className="grey-lighten-4 text-no-u pointer-no-u mr-5"
+            >
               Sign In
             </Link>
             <Link
