@@ -15,6 +15,25 @@ import {
 
 import { auth, db, storage } from "../config/firebase";
 
+// Get restaurant reviews to calculate the average rating
+const getAverageRating = async (restaurantId) => {
+  let ratingSum = 0;
+  let count = 0;
+
+  // Get reviews based on restaurantId
+  const reviewsRef = collection(db, "reviews");
+  const q = query(reviewsRef, where("restaurantId", "==", restaurantId));
+  const querySnapshot = await getDocs(q);
+
+  // Get the total ratings and divisor to find the average
+  querySnapshot.forEach((doc) => {
+    ratingSum = ratingSum + doc.data().rating
+    count = count + 1;
+  })
+  // Return the average rating
+  return ratingSum / count;
+}
+
 export const register = async (user, email, password) => {
   try {
     // Create new user in firebase
@@ -90,19 +109,8 @@ export const getRestaurant = async (restaurantId) => {
     const restaurantRef = doc(db, "restaurants", restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
 
-    // Get restaurant reviews to calculate the average rating
-    let ratingSum = 0;
-    let count = 0;
-    const reviewsRef = collection(db, "reviews");
-    const q = query(reviewsRef, where("restaurantId", "==", restaurantId));
-    const querySnapshot = await getDocs(q);
-    // Get the total ratings and divisor ready for finding the average
-    querySnapshot.forEach((doc) => {
-      ratingSum = ratingSum + doc.data().rating
-      count = count + 1;
-    })
-    // Calculate the average rating
-    const rating = ratingSum / count;
+    // Get restaurant average rating
+    const rating = await getAverageRating(restaurantId);
     // Combine restaurant and average rating to return
     const restaurant = {
       ...restaurantSnap.data(),
@@ -157,7 +165,12 @@ export const addReview = async (review, images) => {
     const restaurantRef = doc(db, "restaurants", review.restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
     const restaurantDoc = restaurantSnap.data();
+    
+    // Get restaurant average rating
+    const rating = await getAverageRating(review.restaurantId);
+
     await updateDoc(restaurantRef, {
+      rating,
       totalRatings: restaurantDoc.totalRatings + 1
     })
     
@@ -165,7 +178,7 @@ export const addReview = async (review, images) => {
     if (images.length > 0) {
       // Get newly added review doc id
       const reviewRef = doc(db, "reviews", addedReview.id);
-      // Repeat upload and update review for each image provided
+      // Repeat upload and update review process for each image provided
       for (let i = 0; i < images.length; i++) {
         // Make a ref to the image path w/ file name to upload
         const reviewImagesRef = ref(storage, `images/reviews/${images[i].name}`);

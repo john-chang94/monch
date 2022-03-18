@@ -94,7 +94,7 @@ export default function Register() {
           />
         </div>
         <button
-          className="btn-med my-4"
+          className="btn-med grey-lighten-4 bg-green-darken-3 my-4"
         >
           Register
         </button>

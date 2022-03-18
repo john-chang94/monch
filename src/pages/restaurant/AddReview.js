@@ -21,8 +21,8 @@ export const AddReview = ({
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
     // Font Awesome for filled and empty stars
-    const filled = "fas fa-star green pointer";
-    const empty = "far fa-star green pointer";
+    const filled = "fas fa-star green-darken-2 pointer";
+    const empty = "far fa-star green-darken-2 pointer";
     let stars = [];
 
     for (let i = 0; i < 5; i++) {
@@ -47,7 +47,7 @@ export const AddReview = ({
     for (let i = 0; i < 5; i++) {
       stars.push(
         <i
-          className="far fa-star green pointer-no-u"
+          className="far fa-star green-darken-2 pointer-no-u"
           key={i}
           onClick={() => handleRating(i)}
         />
@@ -71,6 +71,7 @@ export const AddReview = ({
     
     await addReview(review, images);
 
+    // Add a delay before refetching data so firebase can finish uploading images
     setTimeout(() => {
       handleFetchData();
       setDetails("");
@@ -135,7 +136,7 @@ export const AddReview = ({
           ) : (
             <div>
             <button
-                className={`btn-med mt-3 ${!userHasReview && "grey-lighten-4 bg-teal pointer-no-u"}`}
+                className={`btn-med mt-3 ${!userHasReview && "grey-lighten-4 bg-green-darken-3 pointer-no-u"}`}
                 onClick={handleSubmit}
                 disabled={userHasReview}
               >
@@ -145,7 +146,7 @@ export const AddReview = ({
           )}
         </div>
       ) : (
-        <p className="py-5">
+        <p className="py-5 ml-2">
           <Link to={ROUTES.SIGN_IN} className="text-no-u blue-darken-2">
             Sign in
           </Link>{" "}

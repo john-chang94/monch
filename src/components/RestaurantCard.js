@@ -1,4 +1,4 @@
-import { renderStars } from "../helpers/renderStars";
+import { renderStars } from "../helpers";
 
 export const RestaurantCard = ({
   name,

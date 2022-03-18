@@ -21,15 +21,15 @@ export default function Header() {
   };
 
   return (
-    <header className="flex justify-between align-center bg-green-darken-3">
+    <header className="flex justify-between align-center grey-lighten-4 bg-green-darken-3">
       <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-7">
         Monch!
       </Link>
       <div>
         {user ? (
           <div className="flex">
-            <p className="mr-5 grey-lighten-4">Hi, {user.firstName}</p>
-            <p className="pointer-no-u grey-lighten-4" onClick={handleSignOut}>
+            <p className="mr-5">Hi, {user.firstName}</p>
+            <p className="pointer-no-u" onClick={handleSignOut}>
               Sign Out
             </p>
           </div>

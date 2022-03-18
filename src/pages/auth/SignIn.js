@@ -60,7 +60,7 @@ export default function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button className="btn-med my-4">Sign In</button>
+        <button className="btn-med grey-lighten-4 bg-green-darken-3 my-4">Sign In</button>
       </form>
       {error && <p className="red">{error}</p>}
       <div className="text-center">
