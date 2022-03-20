@@ -79,7 +79,7 @@ export const AddReview = ({
       setImages([]);
       renderEmptyStars();
       setIsSubmitting(false);
-    }, 1200);
+    }, images.length*800); // Add delay for every image that is uploaded
   };
 
   useEffect(() => {

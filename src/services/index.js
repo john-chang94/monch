@@ -62,6 +62,11 @@ export const getUserById = async (userId) => {
   return user;
 };
 
+export const updateUser = async (docId, body) => {
+  const userRef = doc(db, "users", docId);
+  await updateDoc(userRef, body);
+}
+
 // export const addToFirebase = async () => {
 //   try {
 //     const docs = await getDocs(collection(db, "restaurants"));

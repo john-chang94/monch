@@ -24,6 +24,7 @@ export const AuthContextProvider = ({ children }) => {
         });
       } else {
         setActiveUser(null);
+        setUser(null);
         setIsLoading(false);
       }
     });

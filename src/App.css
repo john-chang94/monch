@@ -21,7 +21,7 @@
 
 header {
   height: 50px;
-  padding: 0 10%;
+  padding: 0 15%;
 }
 
 .header-initials {
@@ -29,7 +29,7 @@ header {
 }
 
 .container {
-  padding: 5px 10%;
+  padding: 5px 15%;
 }
 
 .add-review-details {

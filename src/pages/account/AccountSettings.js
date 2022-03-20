@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getUserById, updateUser } from "../../services";
 
 export const AccountSettings = ({ user, setUser }) => {
   const [firstName, setFirstName] = useState("");
@@ -10,6 +11,7 @@ export const AccountSettings = ({ user, setUser }) => {
   const [showAccount, setShowAccount] = useState(true);
   const [showSecurity, setShowSecurity] = useState(false);
   const [showEditAccount, setShowEditAccount] = useState(false);
+  const [error, setError] = useState("");
 
   const handleTabClick = (tab) => {
     if (tab === "account") {
@@ -29,7 +31,17 @@ export const AccountSettings = ({ user, setUser }) => {
     setShowEditAccount(true);
   };
 
-  const handleUpdateAccount = () => {};
+  const handleUpdateAccount = async () => {
+    const body = { firstName, lastName, email, userId: user.userId };
+    await updateUser(user.docId, body);
+
+    // Fetch updated user info after updating
+    const updatedUser = await getUserById(user.userId);
+    setUser(updatedUser);
+    setShowEditAccount(false);
+  };
+
+  const handleUpdatePassword = async () => {}
 
   const renderAccount = () => (
     <>
@@ -97,7 +109,9 @@ export const AccountSettings = ({ user, setUser }) => {
         />
       </div>
       <div className="mt-5">
-        <button className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u">
+        <button
+        onClick={handleUpdatePassword}
+          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u">
           Update
         </button>
       </div>
@@ -133,22 +147,18 @@ export const AccountSettings = ({ user, setUser }) => {
           className="form-input"
         />
       </div>
-      <div>
-        <button
-          onClick={handleUpdateAccount}
-          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u"
-        >
-          Save
-        </button>
-      </div>
-      <div>
-        <button
-          onClick={() => setShowEditAccount(false)}
-          className="btn-med pointer-no-u"
-        >
-          Cancel
-        </button>
-      </div>
+      <button
+        onClick={handleUpdateAccount}
+        className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u mt-2"
+      >
+        Save
+      </button>
+      <button
+        onClick={() => setShowEditAccount(false)}
+        className="btn-med pointer-no-u ml-5"
+      >
+        Cancel
+      </button>
     </>
   );
 
@@ -171,10 +181,10 @@ export const AccountSettings = ({ user, setUser }) => {
       {
         // Display account tab or security tab
         showAccount &&
-            // Display account details or edit account details
-            (showEditAccount ? renderEditAccount() : renderAccount())}
-        {showSecurity && renderSecurity()
+          // Display account details or edit account details
+          (showEditAccount ? renderEditAccount() : renderAccount())
       }
+      {showSecurity && renderSecurity()}
     </div>
   );
 };
