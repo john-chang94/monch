@@ -18,6 +18,6 @@ export const RestaurantDetails = ({ restaurant }) => (
       {renderStars(restaurant.rating)}
       {` (${restaurant.totalRatings} ${restaurant.totalRatings === 1 ? "review" : "reviews"})`}
     </p>
-    <p>Price range: {"$".repeat(parseInt(restaurant.price))}</p>
+    <p>Price: {"$".repeat(parseInt(restaurant.price))}</p>
   </>
 );

@@ -128,7 +128,7 @@ export const AddReview = ({
             />
           </div>
           {isSubmitting ? (
-            <div className="mt-3">
+            <div className="my-3">
               <SpinnerCircular
                 color="#36ad47"
               />

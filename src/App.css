@@ -55,6 +55,10 @@ header {
   margin: 15px 0;
 }
 
+.pagination {
+  list-style: none;
+}
+
 /* SPACING STYLES */
 
 .m-1 {
