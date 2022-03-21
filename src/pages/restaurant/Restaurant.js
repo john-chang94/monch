@@ -14,7 +14,7 @@ import { Reviews } from "../../components/Reviews";
 
 import { SpinnerCircular } from "spinners-react";
 
-export default function Restaurant() {
+export const Restaurant = () => {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [reviewImages, setReviewImages] = useState([]);
@@ -66,16 +66,16 @@ export default function Restaurant() {
   ) : (
     <div>
       <RestaurantDetails restaurant={restaurant} />
-      <hr className="my-5" />
+      <hr className="my-4" />
       <RestaurantImages reviewImages={reviewImages} />
-      <hr className="my-5" />
+      <hr className="my-4" />
       <AddReview
         user={user}
         restaurantId={restaurantId}
         userHasReview={userHasReview}
         handleFetchData={handleFetchData}
       />
-      <hr className="my-5" />
+      <hr className="my-4" />
       <Reviews reviews={reviews} />
     </div>
   );

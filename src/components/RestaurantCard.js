@@ -30,7 +30,7 @@ export const RestaurantCard = ({
         {renderStars(rating)}
         {` (${totalRatings} ${totalRatings === 1 ? "review" : "reviews"})`}
       </p>
-      <p>{"$".repeat(parseInt(price))}</p>
+      <p>Price: {"$".repeat(parseInt(price))}</p>
     </div>
   </div>
 );

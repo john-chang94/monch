@@ -7,7 +7,7 @@ import { auth } from "../../config/firebase";
 
 import * as ROUTES from "../../constants/routes";
 
-export default function SignIn() {
+export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);

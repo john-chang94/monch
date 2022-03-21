@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getRestaurants } from "../../services";
 
-import Restaurants from "../../components/Restaurants";
-
-import { SpinnerCircular } from "spinners-react";
+import { Restaurants } from "../../components/Restaurants";
+import { SearchBar } from "../../components/SearchBar";
 import { Pagination } from "./Pagination";
 
-export default function Home() {
+import { SpinnerCircular } from "spinners-react";
+
+export const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +18,7 @@ export default function Home() {
   const indexOfFirstRestaurant = indexOfLastRestaurant - restaurantsPerPage;
   const currentRestaurants = restaurants.slice(indexOfFirstRestaurant, indexOfLastRestaurant);
 
-  // Handle
+  // Handle page change
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
@@ -38,7 +39,8 @@ export default function Home() {
         </div>
       ) : (
         <div>
-          <p>Featured</p>
+          <SearchBar />
+          <h3 className="green-darken-3 my-3">Featured</h3>
           <Restaurants restaurants={currentRestaurants} />
           <Pagination
             restaurantsPerPage={restaurantsPerPage}

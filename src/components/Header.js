@@ -8,7 +8,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 
-export default function Header() {
+export const Header = () => {
   const { user, setUser, setActiveUser } = useAuth();
 
   const navigate = useNavigate();

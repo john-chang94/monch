@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { RestaurantCard } from "./RestaurantCard";
 
-export default function Restaurants({ restaurants }) {
+export const Restaurants = ({ restaurants }) => {
   return (
     <div>
       {restaurants &&

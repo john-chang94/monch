@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import * as ROUTES from "../../constants/routes";
 
-export default function Register() {
+export const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

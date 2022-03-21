@@ -5,7 +5,7 @@ import { AccountImage } from "./AccountImage";
 import { AccountSettings } from "./AccountSettings";
 import { SpinnerCircular } from "spinners-react";
 
-export default function Account() {
+export const Account = () => {
   const { user, activeUser, setUser } = useAuth();
 
   return user ? (
