@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { getRestaurants } from "../../services";
 
 import { Restaurants } from "../../components/Restaurants";
 import { SearchBar } from "../../components/SearchBar";
 import { Pagination } from "./Pagination";
 
 import { SpinnerCircular } from "spinners-react";
+import { useRestaurants } from "../../contexts/RestaurantsContext";
 
 export const Home = () => {
-  const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [restaurantsPerPage] = useState(10);
+
+  const { restaurants, setRestaurants } = useRestaurants();
 
   // Indexes to keep track of pagination
   const indexOfLastRestaurant = currentPage * restaurantsPerPage;
@@ -25,14 +26,8 @@ export const Home = () => {
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    const handleFetchData = async () => {
-      const restaurants = await getRestaurants();
-      setRestaurants(restaurants);
-      setIsLoading(false);
-    };
-
-    handleFetchData();
-  }, []);
+    if (restaurants) setIsLoading(false);
+  }, [restaurants]);
 
   return (
     <div>
@@ -49,7 +44,7 @@ export const Home = () => {
             />
             <p>Discover your favorite eatery</p>
           </div>
-          <SearchBar />
+          <SearchBar setRestaurants={setRestaurants} />
           <h3 className="green-darken-3 my-3">Featured</h3>
           <Restaurants restaurants={currentRestaurants} />
           <Pagination

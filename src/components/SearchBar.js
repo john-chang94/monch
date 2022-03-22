@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { getSuggestions } from "../services";
+import { getSuggestions, getSearchResults } from "../services";
 
-export const SearchBar = () => {
+export const SearchBar = ({ setRestaurants }) => {
   const [search, setSearch] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -28,17 +28,29 @@ export const SearchBar = () => {
   };
 
   // Let user use arrow keys to navigate suggestions
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     if (e.key === "ArrowUp" && cursor > -1) {
       e.preventDefault(); // Prevent insertion point from moving to the beginning
       setCursor(cursor - 1);
-    } else if (e.key === "ArrowDown" && cursor < suggestions.length - 1) {
+    }
+    else if (e.key === "ArrowDown" && cursor < suggestions.length - 1) {
       setCursor(cursor + 1);
-    } else if (e.key === "Enter") {
+    }
+    else if (e.key === "Enter") {
       e.preventDefault();
-      let searchValue = document.getElementById("search");
-      console.log(searchValue.value);
-      // NEED UPDATE HERE
+      const searchValue = document.getElementById("search");
+      // if (value.length > 1) {
+      //   for (let i = 0; i < value.length; i++) {
+      //     value[i] = value[i][0].toUpperCase() + value[i].substring(1);
+      //   }
+      //   value.join(" ");
+      // } else {
+      //   value = value.substring(0, 1).toUpperCase = value.substring(1);
+      // }
+      const results = await getSearchResults(searchValue.value.toLowerCase());
+      setRestaurants(results);
+      console.log(results);
+      // NEED TO REDIRECT TO SEARCH RESULTS PAGE//////////////////////
 
       // this.props.history.push(`/search?find=${searchValue.value}`);
     }
@@ -57,15 +69,16 @@ export const SearchBar = () => {
     }
   };
 
+  // Set search box value when using arrow keys
   useEffect(() => {
     const item = document.getElementById(cursor);
     if (item) {
       setSearch(item.textContent);
-    } else {
+    }
+    else {
       setSearch(userSearch);
     }
-
-  }, [cursor, userSearch])
+  }, [cursor, userSearch]);
 
   useEffect(() => {
     async function fetchData() {
@@ -79,7 +92,7 @@ export const SearchBar = () => {
   }, []);
 
   return (
-    <div className="search-bar">
+    <div className="search-bar-container">
       <input
         type="text"
         id="search"
@@ -87,17 +100,14 @@ export const SearchBar = () => {
         autoComplete="off"
         onChange={(e) => handleChange(e)}
         onKeyDown={handleKeyDown}
-        className="form-input"
         placeholder="Find a place..."
       />
-      <ul>
+      <ul className={`${suggestions.length && "border-solid-1"}`}>
         {suggestions.map((suggestion, i) => (
           <li
             key={i}
             id={i} // Referred to when setting search input value with arrow keys
-            className={`p-1 border-solid-1 ${
-              cursor === i && "bg-grey-lighten-3"
-            }`}
+            className={`p-1 ${cursor === i && "bg-grey-lighten-3"}`}
             onMouseEnter={() => setSearchValue(true, suggestion.query, i)}
             onMouseLeave={() => setSearchValue(false, suggestion.query, i)}
           >

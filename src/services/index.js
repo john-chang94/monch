@@ -69,28 +69,31 @@ export const updateUser = async (docId, body) => {
 
 // export const addToFirebase = async () => {
 //   try {
-//     // const docs = await getDocs(collection(db, "restaurants"));
-//     // docs.forEach(async (res) => {
-//     //   await updateDoc(doc(db, "restaurants", res.id), {
-//     //     rating: 0,
-//     //   });
-//     // });
+//     let rest = []
+//     const docs = await getDocs(collection(db, "restaurants"));
+//     docs.forEach(async (res) => {
+//       // await updateDoc(doc(db, "restaurants", res.id), {
+//       //   rating: 0,
+//       // });
+//       rest.push(res.data())
+//     });
 
-//     // let arr = [];
-//       for (let i = 0; i < data.length; i++) {
-//         for (let j = 0; j < data[i].categories.length; j++) {
-//           let obj = data[i].categories[j];
-//           // arr.push(obj);
-//           const doc = await addDoc(collection(db, "suggestions"), obj);
-//           console.log(doc.id);
-//         }
+//     let arr = [];
+//       for (let i = 0; i < rest.length; i++) {
+//         // for (let j = 0; j < rest[i].categories.length; j++) {
+//           // let obj = rest[i].categories[j];
+//           let obj = rest[i].name;
+//           arr.push(obj);
+//           // const doc = await addDoc(collection(db, "suggestions"), obj);
+//           // console.log(doc.id);
+//         // }
 //       }
 
-//       // const set = new Set(arr);
-//       // set.forEach(async item => {
-//       //   const doc = await addDoc(collection(db, "suggestions"), {query: item});
-//       //   console.log(doc.id);
-//       // })
+//       const set = new Set(arr);
+//       set.forEach(async item => {
+//         const doc = await addDoc(collection(db, "suggestions"), {query: item});
+//         console.log(doc.id);
+//       })
 
 //   } catch (err) {
 //     console.log(err);
@@ -186,6 +189,37 @@ export const getSuggestions = async () => {
     })
 
     return suggestions;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+export const getSearchResults = async (search) => {
+  try {
+    let results = [];
+    const restaurantsRef = collection(db, "restaurants");
+    // Search for any matching restaurant name
+    const q1 = query(restaurantsRef, where("name", "==", search));
+    // Search for any matching category
+    const q2 = query(restaurantsRef, where("categories", "array-contains", search));
+    const querySnapshot1 = await getDocs(q1);
+    const querySnapshot2 = await getDocs(q2);
+    querySnapshot1.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data()
+      };
+      results.push(obj);
+    })
+    querySnapshot2.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data()
+      };
+      results.push(obj);
+    })
+
+    return results;
   } catch (err) {
     console.log(err.message);
   }

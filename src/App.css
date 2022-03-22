@@ -84,7 +84,7 @@ header {
   right: 0;
   text-align: center;
   margin-top: 150px;
-  animation: hero-text 6s;
+  animation: hero-text 5s;
 }
 
 @keyframes hero-text {
@@ -96,11 +96,13 @@ header {
   }
 }
 
-.search-bar input {
+.search-bar-container input {
   margin-top: 370px;
+  height: 30px;
+  font-size: 16px;
 }
 
-.search-bar ul {
+.search-bar-container ul {
   list-style: none;
 }
 
