@@ -16,7 +16,10 @@ export const Home = () => {
   // Indexes to keep track of pagination
   const indexOfLastRestaurant = currentPage * restaurantsPerPage;
   const indexOfFirstRestaurant = indexOfLastRestaurant - restaurantsPerPage;
-  const currentRestaurants = restaurants.slice(indexOfFirstRestaurant, indexOfLastRestaurant);
+  const currentRestaurants = restaurants.slice(
+    indexOfFirstRestaurant,
+    indexOfLastRestaurant
+  );
 
   // Handle page change
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -39,6 +42,13 @@ export const Home = () => {
         </div>
       ) : (
         <div>
+          <div className="main-img">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/monch-63774.appspot.com/o/images%2Freviews%2Ffood-4773380_1920.jpg?alt=media&token=a2dbf087-aee5-41df-908b-cbccc07e2c4d"
+              alt="food cover for homepage"
+            />
+            <p>Discover your favorite eatery</p>
+          </div>
           <SearchBar />
           <h3 className="green-darken-3 my-3">Featured</h3>
           <Restaurants restaurants={currentRestaurants} />
@@ -51,4 +61,4 @@ export const Home = () => {
       )}
     </div>
   );
-}
+};

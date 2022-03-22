@@ -22,7 +22,7 @@ export const Header = () => {
 
   return (
     <header className="flex justify-between align-center grey-lighten-4 bg-green-darken-3">
-      <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-7">
+      <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-8">
         Monch!
       </Link>
       <div>

@@ -69,26 +69,40 @@ export const updateUser = async (docId, body) => {
 
 // export const addToFirebase = async () => {
 //   try {
-//     const docs = await getDocs(collection(db, "restaurants"));
-//     docs.forEach(async (res) => {
-//       await updateDoc(doc(db, "restaurants", res.id), {
-//         rating: 0,
-//       });
-//     });
-//     //   for (let i = 0; i < data.length; i++) {
-//     //     let obj = data[i];
-//     //     const doc = await addDoc(collection(db, "restaurants"), obj);
-//     //     console.log(doc.id);
-//     //   }
+//     // const docs = await getDocs(collection(db, "restaurants"));
+//     // docs.forEach(async (res) => {
+//     //   await updateDoc(doc(db, "restaurants", res.id), {
+//     //     rating: 0,
+//     //   });
+//     // });
+
+//     // let arr = [];
+//       for (let i = 0; i < data.length; i++) {
+//         for (let j = 0; j < data[i].categories.length; j++) {
+//           let obj = data[i].categories[j];
+//           // arr.push(obj);
+//           const doc = await addDoc(collection(db, "suggestions"), obj);
+//           console.log(doc.id);
+//         }
+//       }
+
+//       // const set = new Set(arr);
+//       // set.forEach(async item => {
+//       //   const doc = await addDoc(collection(db, "suggestions"), {query: item});
+//       //   console.log(doc.id);
+//       // })
+
 //   } catch (err) {
 //     console.log(err);
 //   }
 // };
 
+// Get all restaurants
 export const getRestaurants = async () => {
   try {
-    const querySnapshot = await getDocs(collection(db, "restaurants"));
     let restaurants = [];
+    const restaurantsRef = collection(db, "restaurants");
+    const querySnapshot = await getDocs(restaurantsRef);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       let obj = {
@@ -109,7 +123,6 @@ export const getRestaurant = async (restaurantId) => {
     // Get restaurant
     const restaurantRef = doc(db, "restaurants", restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
-
     // Get restaurant average rating
     const rating = await getAverageRating(restaurantId);
     // Combine restaurant and average rating to return
@@ -158,6 +171,26 @@ export const getRestaurantReviewImages = async (restaurantId) => {
   }
 }
 
+// Get suggestions for search input
+export const getSuggestions = async () => {
+  try {
+    let suggestions = [];
+    const suggestionsRef = collection(db, "suggestions");
+    const querySnapshot = await getDocs(suggestionsRef);
+    querySnapshot.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data(),
+      };
+      suggestions.push(obj);
+    })
+
+    return suggestions;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 export const addReview = async (review, images) => {
   try {
     // Add review to firestore
@@ -170,6 +203,7 @@ export const addReview = async (review, images) => {
     // Get restaurant average rating
     const rating = await getAverageRating(review.restaurantId);
 
+    // Update restaurants rating and total ratings
     await updateDoc(restaurantRef, {
       rating,
       totalRatings: restaurantDoc.totalRatings + 1
