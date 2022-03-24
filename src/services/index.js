@@ -49,6 +49,7 @@ export const register = async (user, email, password) => {
 
 // Use getDocs instead of getDoc because we don't have the actual user docId
 export const getUserById = async (userId) => {
+  console.log('GET USER BY ID')
   const usersRef = collection(db, "users");
   const q = query(usersRef, where("userId", "==", userId));
 
@@ -102,6 +103,7 @@ export const updateUser = async (docId, body) => {
 
 // Get all restaurants
 export const getRestaurants = async () => {
+  console.log('GET RESTAURANTS')
   try {
     let restaurants = [];
     const restaurantsRef = collection(db, "restaurants");
@@ -122,6 +124,7 @@ export const getRestaurants = async () => {
 };
 
 export const getRestaurant = async (restaurantId) => {
+  console.log('GET RESTAURANT')
   try {
     // Get restaurant
     const restaurantRef = doc(db, "restaurants", restaurantId);
@@ -141,6 +144,7 @@ export const getRestaurant = async (restaurantId) => {
 }
 
 export const getReviews = async (restaurantId) => {
+  console.log('GET REVIEWS')
   try {
     let reviews = [];
     const reviewsRef = collection(db, "reviews");
@@ -158,6 +162,7 @@ export const getReviews = async (restaurantId) => {
 }
 
 export const getRestaurantReviewImages = async (restaurantId) => {
+  console.log('GET RESTAURANT REVIEW IMAGES')
   try {
     let images = [];
     const imagesRef = collection(db, "reviewImages");
@@ -176,6 +181,7 @@ export const getRestaurantReviewImages = async (restaurantId) => {
 
 // Get suggestions for search input
 export const getSuggestions = async () => {
+  console.log('GET SUGGESTIONS')
   try {
     let suggestions = [];
     const suggestionsRef = collection(db, "suggestions");
@@ -195,6 +201,7 @@ export const getSuggestions = async () => {
 }
 
 export const getSearchResults = async (search) => {
+  console.log('GET SEARCH RESULTS')
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");

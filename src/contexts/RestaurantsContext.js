@@ -6,7 +6,8 @@ const RestaurantsContext = createContext();
 export const useRestaurants = () => useContext(RestaurantsContext); // Custom hook
 
 export const RestaurantsContextProvider = ({ children }) => {
-  const [restaurants, setRestaurants] = useState(null); // Firebase auth user object
+  const [restaurants, setRestaurants] = useState(null); // Initial fetch for all restaurants
+  const [searchResults, setSearchResults] = useState([]); // Store user's search results
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -17,10 +18,10 @@ export const RestaurantsContextProvider = ({ children }) => {
     }
 
     fetchData();
-  }, [restaurants]);
+  }, []);
 
   return (
-    <RestaurantsContext.Provider value={{ restaurants, setRestaurants }}>
+    <RestaurantsContext.Provider value={{ restaurants, searchResults, setSearchResults }}>
       {!isLoading && children}
     </RestaurantsContext.Provider>
   );

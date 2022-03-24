@@ -6,12 +6,12 @@ import { AccountSettings } from "./AccountSettings";
 import { SpinnerCircular } from "spinners-react";
 
 export const Account = () => {
-  const { user, activeUser, setUser } = useAuth();
+  const { user, setUser } = useAuth();
 
   return user ? (
     <div>
         {/* <AccountImage /> */}
-        <AccountSettings user={user} activeUser={activeUser} setUser={setUser} />
+        <AccountSettings user={user} setUser={setUser} />
     </div>
   ) : (
     <div className="mt-5 text-center">

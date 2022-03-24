@@ -1,4 +1,4 @@
-import { renderStars } from "../helpers";
+import { renderStars, capitalizeFirstLetter } from "../helpers";
 
 export const RestaurantCard = ({
   name,
@@ -10,7 +10,7 @@ export const RestaurantCard = ({
   <div className="card my-3">
     <div className="px-2 py-4">
       <h3>
-        <strong>{name}</strong>
+        <strong>{capitalizeFirstLetter(name)}</strong>
       </h3>
       <p>
         {categories.map((category, i) => (

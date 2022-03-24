@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getSuggestions, getSearchResults } from "../services";
+import { useRestaurants } from "../contexts/RestaurantsContext";
 
-export const SearchBar = ({ setRestaurants }) => {
+export const SearchBar = () => {
   const [search, setSearch] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionsCopy, setSuggestionsCopy] = useState([]);
   const [cursor, setCursor] = useState(-1);
+
+  const navigate = useNavigate();
+  const { setSearchResults } = useRestaurants();
 
   const handleChange = (e) => {
     if (e.target.value) {
@@ -38,21 +43,15 @@ export const SearchBar = ({ setRestaurants }) => {
     }
     else if (e.key === "Enter") {
       e.preventDefault();
+      // Get search value
       const searchValue = document.getElementById("search");
-      // if (value.length > 1) {
-      //   for (let i = 0; i < value.length; i++) {
-      //     value[i] = value[i][0].toUpperCase() + value[i].substring(1);
-      //   }
-      //   value.join(" ");
-      // } else {
-      //   value = value.substring(0, 1).toUpperCase = value.substring(1);
-      // }
+      // Get search results
       const results = await getSearchResults(searchValue.value.toLowerCase());
-      setRestaurants(results);
-      console.log(results);
-      // NEED TO REDIRECT TO SEARCH RESULTS PAGE//////////////////////
 
-      // this.props.history.push(`/search?find=${searchValue.value}`);
+      setSuggestions([]);
+      setSearchResults(results);
+      // Navigate to search results page
+      navigate(`/search?find=${search}`);
     }
   };
 

@@ -12,7 +12,7 @@ export const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [restaurantsPerPage] = useState(10);
 
-  const { restaurants, setRestaurants } = useRestaurants();
+  const { restaurants } = useRestaurants();
 
   // Indexes to keep track of pagination
   const indexOfLastRestaurant = currentPage * restaurantsPerPage;
@@ -44,7 +44,7 @@ export const Home = () => {
             />
             <p>Discover your favorite eatery</p>
           </div>
-          <SearchBar setRestaurants={setRestaurants} />
+          <SearchBar />
           <h3 className="green-darken-3 my-3">Featured</h3>
           <Restaurants restaurants={currentRestaurants} />
           <Pagination
