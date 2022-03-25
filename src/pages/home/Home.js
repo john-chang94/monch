@@ -5,14 +5,13 @@ import { SearchBar } from "../../components/SearchBar";
 import { Pagination } from "./Pagination";
 
 import { SpinnerCircular } from "spinners-react";
-import { useRestaurants } from "../../contexts/RestaurantsContext";
+import { getRestaurants } from "../../services";
 
 export const Home = () => {
+  const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [restaurantsPerPage] = useState(10);
-
-  const { restaurants } = useRestaurants();
 
   // Indexes to keep track of pagination
   const indexOfLastRestaurant = currentPage * restaurantsPerPage;
@@ -26,8 +25,14 @@ export const Home = () => {
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    if (restaurants) setIsLoading(false);
-  }, [restaurants]);
+    async function fetchData() {
+      const restaurants = await getRestaurants();
+      setRestaurants(restaurants);
+      setIsLoading(false);
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div>

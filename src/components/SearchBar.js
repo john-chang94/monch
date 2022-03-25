@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSuggestions, getSearchResults } from "../services";
-import { useRestaurants } from "../contexts/RestaurantsContext";
+import { useSuggestions } from "../contexts/SuggestionsContext";
 
 export const SearchBar = () => {
   const [search, setSearch] = useState("");
   const [userSearch, setUserSearch] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [suggestionsCopy, setSuggestionsCopy] = useState([]);
+  // Used to modify suggestions while user is typing without altering original
+  const [currentSuggestions, setCurrentSuggestions] = useState([]);
   const [cursor, setCursor] = useState(-1);
 
+  const { suggestions } = useSuggestions();
   const navigate = useNavigate();
-  const { setSearchResults } = useRestaurants();
+  const pathname = window.location.pathname; // Used for styling search input
 
+  // Handle change when user is typing
   const handleChange = (e) => {
     if (e.target.value) {
       // If user is typing, filter through suggestions with user input value
-      let tempSuggestions = suggestionsCopy.filter((data) => {
+      let currentSuggestions = suggestions.filter((data) => {
         return data.query
           .toLowerCase()
           .startsWith(e.target.value.toLowerCase());
@@ -24,10 +25,10 @@ export const SearchBar = () => {
 
       setSearch(e.target.value);
       setUserSearch(e.target.value); // Temp save user input for setSearchValue()
-      setSuggestions(tempSuggestions);
+      setCurrentSuggestions(currentSuggestions);
     } else {
       setSearch("");
-      setSuggestions([]);
+      setCurrentSuggestions([]);
       setCursor(-1);
     }
   };
@@ -38,24 +39,29 @@ export const SearchBar = () => {
       e.preventDefault(); // Prevent insertion point from moving to the beginning
       setCursor(cursor - 1);
     }
-    else if (e.key === "ArrowDown" && cursor < suggestions.length - 1) {
+    else if (e.key === "ArrowDown" && cursor < currentSuggestions.length - 1) {
       setCursor(cursor + 1);
     }
     else if (e.key === "Enter") {
       e.preventDefault();
       // Get search value
       const searchValue = document.getElementById("search");
-      // Get search results
-      const results = await getSearchResults(searchValue.value.toLowerCase());
+      const query = searchValue.value.toLowerCase();
 
-      setSuggestions([]);
-      setSearchResults(results);
-      // Navigate to search results page
-      navigate(`/search?find=${search}`);
+      setCurrentSuggestions([]);
+      navigate(`/search?find=${query}`);
     }
   };
 
-  const setSearchValue = (isHovered, suggestion, index) => {
+  // Handle suggestion search with mouse click
+  const handleClick = async (query) => {
+    navigate(`/search?find=${query}`);
+    setSearch(query);
+    setCurrentSuggestions([]);
+  }
+
+  // Set search value of suggestion with mouse hover
+  const handleSetSearchValue = (isHovered, suggestion, index) => {
     // Set value of suggestion in search box when isHovered is true
     if (isHovered) {
       setSearch(suggestion);
@@ -77,18 +83,9 @@ export const SearchBar = () => {
     else {
       setSearch(userSearch);
     }
-  }, [cursor, userSearch]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const suggestions = await getSuggestions();
-      // Set fetched suggestions to a copy so handleChange()
-      // won't overwrite the original suggestions array
-      setSuggestionsCopy(suggestions);
-    }
-
-    fetchData();
-  }, []);
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cursor]);
 
   return (
     <div className="search-bar-container">
@@ -100,15 +97,18 @@ export const SearchBar = () => {
         onChange={(e) => handleChange(e)}
         onKeyDown={handleKeyDown}
         placeholder="Find a place..."
+        // Add top margin when in Search component vs Home component
+        style={pathname === "/search" ? { marginTop: "25px" } : { marginTop: "370px" }}
       />
-      <ul className={`${suggestions.length && "border-solid-1"}`}>
-        {suggestions.map((suggestion, i) => (
+      <ul className={`${currentSuggestions.length && "border-solid-1"}`}>
+        {currentSuggestions.map((suggestion, i) => (
           <li
             key={i}
             id={i} // Referred to when setting search input value with arrow keys
-            className={`p-1 ${cursor === i && "bg-grey-lighten-3"}`}
-            onMouseEnter={() => setSearchValue(true, suggestion.query, i)}
-            onMouseLeave={() => setSearchValue(false, suggestion.query, i)}
+            className={`p-1 ${cursor === i && "bg-grey-lighten-3"} pointer-no-u`}
+            onClick={() => handleClick(suggestion.query)}
+            onMouseEnter={() => handleSetSearchValue(true, suggestion.query, i)}
+            onMouseLeave={() => handleSetSearchValue(false, suggestion.query, i)}
           >
             {suggestion.query}
           </li>

@@ -13,13 +13,13 @@ import { Restaurant } from "./pages/restaurant/Restaurant";
 import { Footer } from "./components/Footer";
 
 import { AuthContextProvider } from "./contexts/AuthContext";
-import { RestaurantsContextProvider } from "./contexts/RestaurantsContext";
+import { SuggestionsContextProvider } from "./contexts/SuggestionsContext";
 
 function App() {
   return (
     <div className="h-100">
       <AuthContextProvider>
-        <RestaurantsContextProvider>
+        <SuggestionsContextProvider>
           <div className="flex flex-col justify-between h-100">
             <div>
               <Header />
@@ -36,7 +36,7 @@ function App() {
             </div>
             <Footer />
           </div>
-        </RestaurantsContextProvider>
+        </SuggestionsContextProvider>
       </AuthContextProvider>
     </div>
   );
