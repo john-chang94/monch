@@ -232,6 +232,41 @@ export const getSearchResults = async (search) => {
   }
 }
 
+export const getFilteredSearchResults = async (search, price) => {
+  console.log('GET FILTERED SEARCH RESULTS')
+  try {
+    let results = [];
+    const restaurantsRef = collection(db, "restaurants");
+    // Search for any matching restaurant name and matching price
+    const q1 = query(restaurantsRef, where("name", "==", search), where("price", "==", price));
+    // Search for any matching category and matching price
+    const q2 = query(restaurantsRef, where("categories", "array-contains", search), where("price", "==", price));
+    // Search for matching price
+    // const q3 = query(restaurantsRef, where("price", "==", price));
+    const querySnapshot1 = await getDocs(q1);
+    const querySnapshot2 = await getDocs(q2);
+    // const querySnapshot3 = await getDocs(q3);
+    querySnapshot1.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data()
+      };
+      results.push(obj);
+    })
+    querySnapshot2.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data()
+      };
+      results.push(obj);
+    })
+
+    return results;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 export const addReview = async (review, images) => {
   try {
     // Add review to firestore

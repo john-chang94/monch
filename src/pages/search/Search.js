@@ -4,7 +4,7 @@ import { SearchBar } from "../../components/SearchBar";
 import { Restaurants } from "../../components/Restaurants";
 import { Pagination } from "../../components/Pagination";
 
-import { getSearchResults } from "../../services";
+import { getSearchResults, getFilteredSearchResults } from "../../services";
 import { SpinnerCircular } from "spinners-react";
 import { Filters } from "./Filters";
 
@@ -36,28 +36,53 @@ export const Search = () => {
   // Handle page change
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleFilterPrice = (price) => {
+  // Handle price filter change
+  const handleFilterPrice = async (price) => {
+    setIsLoading(true);
+    // Run if price param is provided
     if (price) {
       if (priceQuery) {
+        // Get filtered search results
+        const filteredSearchResults = await getFilteredSearchResults(findQuery, price);
+        setSearchResults(filteredSearchResults);
+        setIsLoading(false);
+
         // Set "price" query string if already in URL
         searchParams.set("price", price);
         navigate(`/search?${searchParams}`);
       }
       else {
+        // Get filtered search results
+        const filteredSearchResults = await getFilteredSearchResults(findQuery, price);
+        setSearchResults(filteredSearchResults);
+        setIsLoading(false);
+
         // Add "price" query string if not already in URL
         searchParams.append("price", price);
         navigate(`/search?${searchParams}`);
       }
     }
+    // Else run if no price param provided
     else {
+      // Get search results with no filter
+      const results = await getSearchResults(findQuery);
+      setSearchResults(results);
+      setIsLoading(false);
+      
       // Remove "price" query string from URL if no price filter selected
       searchParams.delete("price");
       navigate(`/search?${searchParams}`);
     }
   }
-
+  
   useEffect(() => {
     async function fetchData() {
+      // Remove filter on page load
+      if (searchParams.has("price")) {
+        searchParams.delete("price");
+        navigate(`/search?${searchParams}`);
+      }
+      // Get search results with no filter
       const results = await getSearchResults(findQuery);
       setSearchResults(results);
       setIsLoading(false);

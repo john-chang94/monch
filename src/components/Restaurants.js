@@ -20,7 +20,7 @@ export const Restaurants = ({ restaurants }) => {
             </Link>
           )
         ) : (
-          <p className="text-center mt-5">No restaurants found</p>
+          <p className="text-center mt-5">No results</p>
         )}
     </div>
   );
