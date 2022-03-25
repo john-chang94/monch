@@ -1,9 +1,9 @@
 import React from "react";
-import { renderStars } from "../../helpers";
+import { renderStars, capitalizeFirstLetter } from "../../helpers";
 
 export const RestaurantDetails = ({ restaurant }) => (
   <>
-    <h3>{restaurant.name}</h3>
+    <h3>{capitalizeFirstLetter(restaurant.name)}</h3>
     <p className="text-3">
       {restaurant.categories.map((category, i) => (
         <em key={i}>

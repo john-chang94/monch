@@ -33,7 +33,7 @@ header {
 }
 
 .header-initials {
-  padding: 6px;
+  padding: 6px 9px;
 }
 
 .container {
@@ -53,7 +53,7 @@ header {
 }
 
 .img-gallery {
-  width: 50%;
+  width: 60%;
 }
 
 .account-tabs {
@@ -84,10 +84,10 @@ header {
   right: 0;
   text-align: center;
   margin-top: 150px;
-  animation: hero-text 5s;
+  animation: main-img 5s;
 }
 
-@keyframes hero-text {
+@keyframes main-img {
   from {
     opacity: 0;
   }
@@ -881,7 +881,7 @@ select {
     grid-column: 3 / span 8;
   }
   .img-gallery {
-    width: 70%;
+    width: 80%;
   }
 }
 

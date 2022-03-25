@@ -1,30 +1,71 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Restaurants } from "../../components/Restaurants";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SearchBar } from "../../components/SearchBar";
+import { Restaurants } from "../../components/Restaurants";
+import { Pagination } from "../../components/Pagination";
 
 import { getSearchResults } from "../../services";
 import { SpinnerCircular } from "spinners-react";
+import { Filters } from "./Filters";
 
 export const Search = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [restaurantsPerPage] = useState(10);
   
+  const navigate = useNavigate();
+
   // Used to search for query strings
   const location = useLocation();
+  // Get query string object instance
+  const searchParams = new URLSearchParams(location.search);
   // Get query string value of the "find" key
-  const query = new URLSearchParams(location.search).get("find");
+  const findQuery = searchParams.get("find");
+  // Get query string value of the "price" key
+  const priceQuery = searchParams.get("price");
+
+  // Indexes to keep track of pagination
+  const indexOfLastRestaurant = currentPage * restaurantsPerPage;
+  const indexOfFirstRestaurant = indexOfLastRestaurant - restaurantsPerPage;
+  const currentRestaurants = searchResults.slice(
+    indexOfFirstRestaurant,
+    indexOfLastRestaurant
+  );
+
+  // Handle page change
+  const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleFilterPrice = (price) => {
+    if (price) {
+      if (priceQuery) {
+        // Set "price" query string if already in URL
+        searchParams.set("price", price);
+        navigate(`/search?${searchParams}`);
+      }
+      else {
+        // Add "price" query string if not already in URL
+        searchParams.append("price", price);
+        navigate(`/search?${searchParams}`);
+      }
+    }
+    else {
+      // Remove "price" query string from URL if no price filter selected
+      searchParams.delete("price");
+      navigate(`/search?${searchParams}`);
+    }
+  }
 
   useEffect(() => {
     async function fetchData() {
-      const results = await getSearchResults(query);
+      const results = await getSearchResults(findQuery);
       setSearchResults(results);
       setIsLoading(false);
     }
 
     fetchData();
     // Refetch when user changes search value from this component
-  }, [query]);
+  }, [findQuery]);
 
   return (
     <div>
@@ -36,9 +77,16 @@ export const Search = () => {
         <>
           <SearchBar />
           <div className="mt-2">
-              <p>Showing results for "{query}"</p>
+              <p>Showing results for "{findQuery}"</p>
+              <p><em>Results: {searchResults.length}</em></p>
           </div>
-          <Restaurants restaurants={searchResults} />
+          <Filters price={priceQuery} handleFilterPrice={handleFilterPrice} />
+          <Restaurants restaurants={currentRestaurants} />
+          <Pagination
+            restaurantsPerPage={restaurantsPerPage}
+            totalRestaurants={searchResults.length}
+            handlePaginate={handlePaginate}
+          />
         </>
       )}
     </div>

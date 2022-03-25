@@ -6,7 +6,7 @@ import { RestaurantCard } from "./RestaurantCard";
 export const Restaurants = ({ restaurants }) => {
   return (
     <div>
-      {restaurants &&
+      {restaurants.length ?
         restaurants.map(
           ({ docId, name, categories, rating, totalRatings, price }, i) => (
             <Link to={`/restaurants/${docId}`} key={i} className="black text-no-u">
@@ -19,6 +19,8 @@ export const Restaurants = ({ restaurants }) => {
               />
             </Link>
           )
+        ) : (
+          <p className="text-center mt-5">No restaurants found</p>
         )}
     </div>
   );

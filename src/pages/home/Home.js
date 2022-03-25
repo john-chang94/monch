@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Restaurants } from "../../components/Restaurants";
 import { SearchBar } from "../../components/SearchBar";
-import { Pagination } from "./Pagination";
+import { Pagination } from "../../components/Pagination";
 
 import { SpinnerCircular } from "spinners-react";
 import { getRestaurants } from "../../services";

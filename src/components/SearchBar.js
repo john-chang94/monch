@@ -48,8 +48,9 @@ export const SearchBar = () => {
       const searchValue = document.getElementById("search");
       const query = searchValue.value.toLowerCase();
 
-      setCurrentSuggestions([]);
       navigate(`/search?find=${query}`);
+      setSearch(query);
+      setCurrentSuggestions([]);
     }
   };
 
