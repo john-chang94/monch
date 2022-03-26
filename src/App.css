@@ -115,6 +115,10 @@ header {
   list-style: none;
 }
 
+.hide-filters-content {
+  display: none;
+}
+
 footer {
   padding: 30px 0;
 }
@@ -731,15 +735,18 @@ select {
   border-radius: 15px;
 }
 .border-x {
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
 }
 .border-y {
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+.border-top {
+  border-top: 1px solid lightgray;
 }
 .border-bottom {
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid lightgray;
 }
 .box-shadow {
   box-shadow: 0 4px 8px rgb(220, 220, 220);

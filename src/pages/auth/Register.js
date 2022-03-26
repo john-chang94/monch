@@ -43,7 +43,7 @@ export const Register = () => {
   return (
     <div>
       <form onSubmit={handleRegister} className="flex flex-col align-center mt-5">
-        <div className="flex flex-col mb-1 w-90">
+        <div className="flex flex-col mb-1 w-80">
           <label htmlFor="firstName">First Name</label>
           <input
             type="text"
@@ -53,7 +53,7 @@ export const Register = () => {
             onChange={(e) => setFirstName(e.target.value)}
           />
         </div>
-        <div className="flex flex-col mb-1 w-90">
+        <div className="flex flex-col mb-1 w-80">
           <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
@@ -63,7 +63,7 @@ export const Register = () => {
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
-        <div className="flex flex-col mb-1 w-90">
+        <div className="flex flex-col mb-1 w-80">
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -73,7 +73,7 @@ export const Register = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="flex flex-col mb-1 w-90">
+        <div className="flex flex-col mb-1 w-80">
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -83,7 +83,7 @@ export const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="flex flex-col mb-1 w-90">
+        <div className="flex flex-col mb-1 w-80">
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             type="password"

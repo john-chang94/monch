@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { SearchBar } from "../../components/SearchBar";
 import { Restaurants } from "../../components/Restaurants";
 import { Pagination } from "../../components/Pagination";
+import { Filters } from "./Filters";
 
 import { getSearchResults, getFilteredSearchResults } from "../../services";
 import { SpinnerCircular } from "spinners-react";
-import { Filters } from "./Filters";
 
 export const Search = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [restaurantsPerPage] = useState(10);
-  
+
   const navigate = useNavigate();
 
   // Used to search for query strings
@@ -43,17 +44,22 @@ export const Search = () => {
     if (price) {
       if (priceQuery) {
         // Get filtered search results
-        const filteredSearchResults = await getFilteredSearchResults(findQuery, price);
+        const filteredSearchResults = await getFilteredSearchResults(
+          findQuery,
+          price
+        );
         setSearchResults(filteredSearchResults);
         setIsLoading(false);
 
         // Set "price" query string if already in URL
         searchParams.set("price", price);
         navigate(`/search?${searchParams}`);
-      }
-      else {
+      } else {
         // Get filtered search results
-        const filteredSearchResults = await getFilteredSearchResults(findQuery, price);
+        const filteredSearchResults = await getFilteredSearchResults(
+          findQuery,
+          price
+        );
         setSearchResults(filteredSearchResults);
         setIsLoading(false);
 
@@ -68,13 +74,13 @@ export const Search = () => {
       const results = await getSearchResults(findQuery);
       setSearchResults(results);
       setIsLoading(false);
-      
+
       // Remove "price" query string from URL if no price filter selected
       searchParams.delete("price");
       navigate(`/search?${searchParams}`);
     }
-  }
-  
+  };
+
   useEffect(() => {
     async function fetchData() {
       // Remove filter on page load
@@ -94,18 +100,20 @@ export const Search = () => {
 
   return (
     <div>
+      <SearchBar />
+      <div className="mt-2">
+        <p>Showing results for "{findQuery}"</p>
+        <p>
+          <em>Results: {searchResults.length}</em>
+        </p>
+      </div>
+      <Filters price={priceQuery} handleFilterPrice={handleFilterPrice} />
       {isLoading ? (
         <div className="mt-5 text-center">
           <SpinnerCircular color="#36ad47" size={80} />
         </div>
       ) : (
         <>
-          <SearchBar />
-          <div className="mt-2">
-              <p>Showing results for "{findQuery}"</p>
-              <p><em>Results: {searchResults.length}</em></p>
-          </div>
-          <Filters price={priceQuery} handleFilterPrice={handleFilterPrice} />
           <Restaurants restaurants={currentRestaurants} />
           <Pagination
             restaurantsPerPage={restaurantsPerPage}

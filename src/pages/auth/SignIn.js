@@ -40,7 +40,7 @@ export const SignIn = () => {
   return (
     <div>
       <form onSubmit={handleSignIn} className="flex flex-col align-center mt-5">
-        <div className="mb-1 w-90">
+        <div className="mb-1 w-80">
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -50,7 +50,7 @@ export const SignIn = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="mb-1 w-90">
+        <div className="mb-1 w-80">
           <label htmlFor="password">Password</label>
           <input
             type="password"
