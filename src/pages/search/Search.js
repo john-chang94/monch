@@ -6,7 +6,7 @@ import { Restaurants } from "../../components/Restaurants";
 import { Pagination } from "../../components/Pagination";
 import { Filters } from "./Filters";
 
-import { getSearchResults, getFilteredSearchResults } from "../../services";
+import { getSearchResults, getPriceFilteredResults, getRatingFilteredResults } from "../../services";
 import { SpinnerCircular } from "spinners-react";
 
 export const Search = () => {
@@ -25,6 +25,8 @@ export const Search = () => {
   const findQuery = searchParams.get("find");
   // Get query string value of the "price" key
   const priceQuery = searchParams.get("price");
+  // Get query string value of the "rating" key
+  const ratingQuery = searchParams.get("rating");
 
   // Indexes to keep track of pagination
   const indexOfLastRestaurant = currentPage * restaurantsPerPage;
@@ -38,13 +40,13 @@ export const Search = () => {
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Handle price filter change
-  const handleFilterPrice = async (price) => {
+  const handlePriceFilter = async (price) => {
     setIsLoading(true);
     // Run if price param is provided
     if (price) {
       if (priceQuery) {
         // Get filtered search results
-        const filteredSearchResults = await getFilteredSearchResults(
+        const filteredSearchResults = await getPriceFilteredResults(
           findQuery,
           price
         );
@@ -56,7 +58,7 @@ export const Search = () => {
         navigate(`/search?${searchParams}`);
       } else {
         // Get filtered search results
-        const filteredSearchResults = await getFilteredSearchResults(
+        const filteredSearchResults = await getPriceFilteredResults(
           findQuery,
           price
         );
@@ -89,7 +91,8 @@ export const Search = () => {
         navigate(`/search?${searchParams}`);
       }
       // Get search results with no filter
-      const results = await getSearchResults(findQuery);
+      // const results = await getSearchResults(findQuery);
+      const results = await getRatingFilteredResults(findQuery, 3.5);
       setSearchResults(results);
       setIsLoading(false);
     }
@@ -107,7 +110,7 @@ export const Search = () => {
           <em>Results: {searchResults.length}</em>
         </p>
       </div>
-      <Filters price={priceQuery} handleFilterPrice={handleFilterPrice} />
+      <Filters price={priceQuery} handlePriceFilter={handlePriceFilter} />
       {isLoading ? (
         <div className="mt-5 text-center">
           <SpinnerCircular color="#36ad47" size={80} />

@@ -10,7 +10,7 @@ import {
   doc,
   updateDoc,
   arrayUnion,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
 
 import { auth, db, storage } from "../config/firebase";
@@ -27,12 +27,12 @@ const getAverageRating = async (restaurantId) => {
 
   // Get the total ratings and divisor to find the average
   querySnapshot.forEach((doc) => {
-    ratingSum = ratingSum + doc.data().rating
+    ratingSum = ratingSum + doc.data().rating;
     count = count + 1;
-  })
+  });
   // Return the average rating
   return ratingSum / count;
-}
+};
 
 export const register = async (user, email, password) => {
   try {
@@ -49,7 +49,7 @@ export const register = async (user, email, password) => {
 
 // Use getDocs instead of getDoc because we don't have the actual user docId
 export const getUserById = async (userId) => {
-  console.log('GET USER BY ID')
+  console.log("GET USER BY ID");
   const usersRef = collection(db, "users");
   const q = query(usersRef, where("userId", "==", userId));
 
@@ -66,7 +66,7 @@ export const getUserById = async (userId) => {
 export const updateUser = async (docId, body) => {
   const userRef = doc(db, "users", docId);
   await updateDoc(userRef, body);
-}
+};
 
 // export const addToFirebase = async () => {
 //   try {
@@ -103,7 +103,7 @@ export const updateUser = async (docId, body) => {
 
 // Get all restaurants
 export const getRestaurants = async () => {
-  console.log('GET RESTAURANTS')
+  console.log("GET RESTAURANTS");
   try {
     let restaurants = [];
     const restaurantsRef = collection(db, "restaurants");
@@ -124,7 +124,7 @@ export const getRestaurants = async () => {
 };
 
 export const getRestaurant = async (restaurantId) => {
-  console.log('GET RESTAURANT')
+  console.log("GET RESTAURANT");
   try {
     // Get restaurant
     const restaurantRef = doc(db, "restaurants", restaurantId);
@@ -134,54 +134,62 @@ export const getRestaurant = async (restaurantId) => {
     // Combine restaurant and average rating to return
     const restaurant = {
       ...restaurantSnap.data(),
-      rating: rating
-    }
+      rating: rating,
+    };
 
     return restaurant;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 export const getReviews = async (restaurantId) => {
-  console.log('GET REVIEWS')
+  console.log("GET REVIEWS");
   try {
     let reviews = [];
     const reviewsRef = collection(db, "reviews");
-    const q = query(reviewsRef, where("restaurantId", "==", restaurantId), orderBy("date", "desc"));
+    const q = query(
+      reviewsRef,
+      where("restaurantId", "==", restaurantId),
+      orderBy("date", "desc")
+    );
     const querySnapshot = await getDocs(q);
     // Add each review snapshot into reviews array
     querySnapshot.forEach((doc) => {
       reviews.push(doc.data());
-    })
+    });
 
     return reviews;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 export const getRestaurantReviewImages = async (restaurantId) => {
-  console.log('GET RESTAURANT REVIEW IMAGES')
+  console.log("GET RESTAURANT REVIEW IMAGES");
   try {
     let images = [];
     const imagesRef = collection(db, "reviewImages");
-    const q = query(imagesRef, where("restaurantId", "==", restaurantId), orderBy("dateAdded", "desc"));
+    const q = query(
+      imagesRef,
+      where("restaurantId", "==", restaurantId),
+      orderBy("dateAdded", "desc")
+    );
     const querySnapshot = await getDocs(q);
     // Add each review snapshot into images array
     querySnapshot.forEach((doc) => {
       images.push(doc.data());
-    })
+    });
 
     return images;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 // Get suggestions for search input
 export const getSuggestions = async () => {
-  console.log('GET SUGGESTIONS')
+  console.log("GET SUGGESTIONS");
   try {
     let suggestions = [];
     const suggestionsRef = collection(db, "suggestions");
@@ -192,80 +200,178 @@ export const getSuggestions = async () => {
         ...doc.data(),
       };
       suggestions.push(obj);
-    })
+    });
 
     return suggestions;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 export const getSearchResults = async (search) => {
-  console.log('GET SEARCH RESULTS')
+  console.log("GET SEARCH RESULTS");
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
     // Search for any matching restaurant name
     const q1 = query(restaurantsRef, where("name", "==", search));
     // Search for any matching category
-    const q2 = query(restaurantsRef, where("categories", "array-contains", search));
+    const q2 = query(
+      restaurantsRef,
+      where("categories", "array-contains", search)
+    );
     const querySnapshot1 = await getDocs(q1);
     const querySnapshot2 = await getDocs(q2);
     querySnapshot1.forEach((doc) => {
       let obj = {
         docId: doc.id,
-        ...doc.data()
+        ...doc.data(),
       };
       results.push(obj);
-    })
+    });
     querySnapshot2.forEach((doc) => {
       let obj = {
         docId: doc.id,
-        ...doc.data()
+        ...doc.data(),
       };
       results.push(obj);
-    })
+    });
 
     return results;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
-export const getFilteredSearchResults = async (search, price) => {
-  console.log('GET FILTERED SEARCH RESULTS')
+export const getPriceFilteredResults = async (search, price) => {
+  console.log("GET PRICE FILTERED RESULTS");
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
     // Search for any matching restaurant name and matching price
-    const q1 = query(restaurantsRef, where("name", "==", search), where("price", "==", price));
+    const q1 = query(
+      restaurantsRef,
+      where("name", "==", search),
+      where("price", "==", price)
+    );
     // Search for any matching category and matching price
-    const q2 = query(restaurantsRef, where("categories", "array-contains", search), where("price", "==", price));
-    // Search for matching price
-    // const q3 = query(restaurantsRef, where("price", "==", price));
+    const q2 = query(
+      restaurantsRef,
+      where("categories", "array-contains", search),
+      where("price", "==", price)
+    );
     const querySnapshot1 = await getDocs(q1);
     const querySnapshot2 = await getDocs(q2);
-    // const querySnapshot3 = await getDocs(q3);
     querySnapshot1.forEach((doc) => {
       let obj = {
         docId: doc.id,
-        ...doc.data()
+        ...doc.data(),
       };
       results.push(obj);
-    })
+    });
     querySnapshot2.forEach((doc) => {
       let obj = {
         docId: doc.id,
-        ...doc.data()
+        ...doc.data(),
       };
       results.push(obj);
-    })
+    });
 
     return results;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
+
+export const getRatingFilteredResults = async (search, rating) => {
+  console.log("GET RATING FILTERED RESULTS");
+  try {
+    let results = [];
+    const restaurantsRef = collection(db, "restaurants");
+    // Search for any matching restaurant name and matching rating
+    const q1 = query(
+      restaurantsRef,
+      where("name", "==", search),
+      where("rating", ">=", Math.floor(rating)),
+      where("rating", "<=", Math.ceil(rating) - 0.01)
+    );
+    // Search for any matching category and matching rating
+    const q2 = query(
+      restaurantsRef,
+      where("categories", "array-contains", search),
+      where("rating", ">=", Math.floor(rating)),
+      where("rating", "<=", Math.ceil(rating) - 0.01)
+    );
+    const querySnapshot1 = await getDocs(q1);
+    const querySnapshot2 = await getDocs(q2);
+    querySnapshot1.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data(),
+      };
+      results.push(obj);
+    });
+    querySnapshot2.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data(),
+      };
+      results.push(obj);
+    });
+
+    return results;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getPriceAndRatingFilteredResults = async (
+  search,
+  price,
+  rating
+) => {
+  console.log("GET PRICE AND RATING FILTERED RESULTS");
+  try {
+    let results = [];
+    const restaurantsRef = collection(db, "restaurants");
+    // Search for any matching restaurant name and matching price
+    const q1 = query(
+      restaurantsRef,
+      where("name", "==", search),
+      where("price", "==", price),
+      where("rating", ">=", Math.floor(rating)),
+      where("rating", "<=", Math.ceil(rating) - 0.01)
+    );
+    // Search for any matching category and matching price
+    const q2 = query(
+      restaurantsRef,
+      where("categories", "array-contains", search),
+      where("price", "==", price),
+      where("rating", ">=", Math.floor(rating)),
+      where("rating", "<=", Math.ceil(rating) - 0.01)
+    );
+    const querySnapshot1 = await getDocs(q1);
+    const querySnapshot2 = await getDocs(q2);
+    querySnapshot1.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data(),
+      };
+      results.push(obj);
+    });
+    querySnapshot2.forEach((doc) => {
+      let obj = {
+        docId: doc.id,
+        ...doc.data(),
+      };
+      results.push(obj);
+    });
+
+    return results;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 export const addReview = async (review, images) => {
   try {
@@ -275,16 +381,16 @@ export const addReview = async (review, images) => {
     const restaurantRef = doc(db, "restaurants", review.restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
     const restaurantDoc = restaurantSnap.data();
-    
+
     // Get restaurant average rating
     const rating = await getAverageRating(review.restaurantId);
 
     // Update restaurants rating and total ratings
     await updateDoc(restaurantRef, {
       rating,
-      totalRatings: restaurantDoc.totalRatings + 1
-    })
-    
+      totalRatings: restaurantDoc.totalRatings + 1,
+    });
+
     // Run if review has any images
     if (images.length > 0) {
       // Get newly added review doc id
@@ -292,7 +398,10 @@ export const addReview = async (review, images) => {
       // Repeat upload and update review process for each image provided
       for (let i = 0; i < images.length; i++) {
         // Make a ref to the image path w/ file name to upload
-        const reviewImagesRef = ref(storage, `images/reviews/${images[i].name}`);
+        const reviewImagesRef = ref(
+          storage,
+          `images/reviews/${images[i].name}`
+        );
         // Upload image file to the review image ref
         uploadBytes(reviewImagesRef, images[i])
           .then(async (snapshot) => {
@@ -300,30 +409,29 @@ export const addReview = async (review, images) => {
             const url = await getDownloadURL(snapshot.ref);
             // Add image url to review images array
             await updateDoc(reviewRef, {
-              images: arrayUnion(url)
-            })
+              images: arrayUnion(url),
+            });
             // Add image to reviewImages collection for rendering all images
             const imageBody = {
               dateAdded: review.date,
               restaurantId: review.restaurantId,
-              url: url
+              url: url,
             };
             await addDoc(collection(db, "reviewImages"), imageBody);
           })
           .catch((err) => {
             console.log(err.message);
-          })
+          });
       }
     }
-
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 // export const addReviewImage = async (reviewId, image) => {
 //   try {
-    
+
 //   } catch (err) {
 //     console.log(err.message);
 //   }
