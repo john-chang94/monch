@@ -1,15 +1,15 @@
 import React from "react";
 import { renderStars } from "../../helpers/index";
 
-export const RatingFilter = ({ rating, handleRatingFilter }) => (
+export const RatingFilter = ({ rating, handleFilter }) => (
   <>
     <p>
       <input
         type="checkbox"
         name="ratingFilter"
-        checked={rating === "1"}
+        checked={rating === "1.01"}
         onChange={() =>
-          rating !== "1" ? handleRatingFilter("1") : handleRatingFilter("")
+          rating !== "1.01" ? handleFilter("rating", "1.01") : handleFilter("rating", "")
         }
       />
       <span> {renderStars(1)}</span>
@@ -18,45 +18,45 @@ export const RatingFilter = ({ rating, handleRatingFilter }) => (
       <input
         type="checkbox"
         name="ratingFilter"
-        checked={rating === "2"}
+        checked={rating === "2.01"}
         onChange={() =>
-          rating !== "2" ? handleRatingFilter("2") : handleRatingFilter("")
+          rating !== "2.01" ? handleFilter("rating", "2.01") : handleFilter("rating", "")
         }
       />
-      <span> $$</span>
+      <span> {renderStars(2)}</span>
     </p>
     <p>
       <input
         type="checkbox"
         name="ratingFilter"
-        checked={rating === "3"}
+        checked={rating === "3.01"}
         onChange={() =>
-          rating !== "3" ? handleRatingFilter("3") : handleRatingFilter("")
+          rating !== "3.01" ? handleFilter("rating", "3.01") : handleFilter("rating", "")
         }
       />
-      <span> $$$</span>
+      <span> {renderStars(3)}</span>
     </p>
     <p>
       <input
         type="checkbox"
         name="ratingFilter"
-        checked={rating === "4"}
+        checked={rating === "4.01"}
         onChange={() =>
-          rating !== "4" ? handleRatingFilter("4") : handleRatingFilter("")
+          rating !== "4.01" ? handleFilter("rating", "4.01") : handleFilter("rating", "")
         }
       />
-      <span> $$$$</span>
+      <span> {renderStars(4)}</span>
     </p>
     <p>
       <input
         type="checkbox"
         name="ratingFilter"
-        checked={rating === "5"}
+        checked={rating === "5.01"}
         onChange={() =>
-          rating !== "5" ? handleRatingFilter("5") : handleRatingFilter("")
+          rating !== "5.01" ? handleFilter("5") : handleFilter("")
         }
       />
-      <span> $$$$</span>
+      <span> {renderStars(5)}</span>
     </p>
   </>
 );

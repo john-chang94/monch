@@ -248,7 +248,7 @@ export const getPriceFilteredResults = async (search, price) => {
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
-    // Search for any matching restaurant name and matching price
+    // Search for a matching restaurant name price
     const q1 = query(
       restaurantsRef,
       where("name", "==", search),
@@ -288,7 +288,8 @@ export const getRatingFilteredResults = async (search, rating) => {
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
-    // Search for any matching restaurant name and matching rating
+    // Search for a matching restaurant name and rating
+    console.log(Math.ceil(rating) - 0.01)
     const q1 = query(
       restaurantsRef,
       where("name", "==", search),
@@ -334,7 +335,7 @@ export const getPriceAndRatingFilteredResults = async (
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
-    // Search for any matching restaurant name and matching price
+    // Search for a matching restaurant name, price, and rating
     const q1 = query(
       restaurantsRef,
       where("name", "==", search),
@@ -342,7 +343,7 @@ export const getPriceAndRatingFilteredResults = async (
       where("rating", ">=", Math.floor(rating)),
       where("rating", "<=", Math.ceil(rating) - 0.01)
     );
-    // Search for any matching category and matching price
+    // Search for any matching category, matching price and rating
     const q2 = query(
       restaurantsRef,
       where("categories", "array-contains", search),

@@ -6,7 +6,12 @@ import { Restaurants } from "../../components/Restaurants";
 import { Pagination } from "../../components/Pagination";
 import { Filters } from "./Filters";
 
-import { getSearchResults, getPriceFilteredResults, getRatingFilteredResults } from "../../services";
+import {
+  getSearchResults,
+  getPriceFilteredResults,
+  getRatingFilteredResults,
+  getPriceAndRatingFilteredResults,
+} from "../../services";
 import { SpinnerCircular } from "spinners-react";
 
 export const Search = () => {
@@ -39,60 +44,96 @@ export const Search = () => {
   // Handle page change
   const handlePaginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Handle price filter change
-  const handlePriceFilter = async (price) => {
+  // Dynamic filter handler
+  const handleFilter = async (key, value) => {
     setIsLoading(true);
-    // Run if price param is provided
-    if (price) {
-      if (priceQuery) {
-        // Get filtered search results
-        const filteredSearchResults = await getPriceFilteredResults(
-          findQuery,
-          price
-        );
-        setSearchResults(filteredSearchResults);
-        setIsLoading(false);
+    let results;
 
-        // Set "price" query string if already in URL
-        searchParams.set("price", price);
-        navigate(`/search?${searchParams}`);
-      } else {
-        // Get filtered search results
-        const filteredSearchResults = await getPriceFilteredResults(
-          findQuery,
-          price
-        );
-        setSearchResults(filteredSearchResults);
-        setIsLoading(false);
-
-        // Add "price" query string if not already in URL
-        searchParams.append("price", price);
-        navigate(`/search?${searchParams}`);
-      }
+    if (priceQuery && ratingQuery) {
+      //
     }
-    // Else run if no price param provided
-    else {
-      // Get search results with no filter
-      const results = await getSearchResults(findQuery);
+
+    switch (key) {
+      case "price":
+        // Run if value is provided
+        if (value) {
+
+          // Run if query string is not already in URL
+          if (priceQuery) {
+            // Get filtered search results
+            results = await getPriceFilteredResults(findQuery, value);
+            // Set key query string value in URL
+            searchParams.set(key, value);
+
+            // Else, run if query string is already in URL
+          } else {
+            // Get filtered search results
+            results = await getPriceFilteredResults(findQuery, value);
+            // Append key query string in URL
+            searchParams.append(key, value);
+          }
+        }
+
+        // Else, run if no value is provided
+        else {
+          // Get search results with no filter
+          results = await getSearchResults(findQuery);
+          // Remove key query string from URL if no key filter selected
+          searchParams.delete(key);
+        }
+        break;
+
+      case "rating":
+        if (value) {
+          if (ratingQuery) {
+            results = await getRatingFilteredResults(findQuery, value);
+            searchParams.set(key, value);
+          } else {
+            results = await getRatingFilteredResults(findQuery, value);
+            searchParams.append(key, value);
+          }
+        }
+        else {
+          results = await getSearchResults(findQuery);
+          searchParams.delete(key);
+        }
+        break;
+      default:
+        break;
+    }
+
+    searchParams.forEach(() => {
+      if (searchParams.has("price") && searchParams.has("rating")) {
+        handleAllFilters();
+        return;
+      }
+    });
+
+    setSearchResults(results);
+    setIsLoading(false);
+    navigate(`/search?${searchParams}`);
+  };
+
+  const handleAllFilters = async () => {
+      const results = await getPriceAndRatingFilteredResults(findQuery, priceQuery, ratingQuery);
+
       setSearchResults(results);
       setIsLoading(false);
-
-      // Remove "price" query string from URL if no price filter selected
-      searchParams.delete("price");
       navigate(`/search?${searchParams}`);
-    }
-  };
+
+      return;
+  }
 
   useEffect(() => {
     async function fetchData() {
       // Remove filter on page load
-      if (searchParams.has("price")) {
-        searchParams.delete("price");
-        navigate(`/search?${searchParams}`);
-      }
+      searchParams.delete("price");
+      searchParams.delete("rating");
+      navigate(`/search?${searchParams}`);
+
       // Get search results with no filter
-      // const results = await getSearchResults(findQuery);
-      const results = await getRatingFilteredResults(findQuery, 3.5);
+      const results = await getSearchResults(findQuery);
+      // const results = await getRatingFilteredResults(findQuery, 4.14);
       setSearchResults(results);
       setIsLoading(false);
     }
@@ -110,7 +151,7 @@ export const Search = () => {
           <em>Results: {searchResults.length}</em>
         </p>
       </div>
-      <Filters price={priceQuery} handlePriceFilter={handlePriceFilter} />
+      <Filters price={priceQuery} rating={ratingQuery} handleFilter={handleFilter} />
       {isLoading ? (
         <div className="mt-5 text-center">
           <SpinnerCircular color="#36ad47" size={80} />

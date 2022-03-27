@@ -1,6 +1,6 @@
 import React from "react";
 
-export const PriceFilter = ({ price, handlePriceFilter }) => (
+export const PriceFilter = ({ price, handleFilter }) => (
   <>
     <p>
       <input
@@ -8,7 +8,7 @@ export const PriceFilter = ({ price, handlePriceFilter }) => (
         name="priceFilter"
         checked={price === "1"}
         onChange={() =>
-          price !== "1" ? handlePriceFilter("1") : handlePriceFilter("")
+          price !== "1" ? handleFilter("price", "1") : handleFilter("price", "")
         }
       />
       <span> $</span>
@@ -19,7 +19,7 @@ export const PriceFilter = ({ price, handlePriceFilter }) => (
         name="priceFilter"
         checked={price === "2"}
         onChange={() =>
-          price !== "2" ? handlePriceFilter("2") : handlePriceFilter("")
+          price !== "2" ? handleFilter("price", "2") : handleFilter("price", "")
         }
       />
       <span> $$</span>
@@ -30,7 +30,7 @@ export const PriceFilter = ({ price, handlePriceFilter }) => (
         name="priceFilter"
         checked={price === "3"}
         onChange={() =>
-          price !== "3" ? handlePriceFilter("3") : handlePriceFilter("")
+          price !== "3" ? handleFilter("price", "3") : handleFilter("price", "")
         }
       />
       <span> $$$</span>
@@ -41,7 +41,7 @@ export const PriceFilter = ({ price, handlePriceFilter }) => (
         name="priceFilter"
         checked={price === "4"}
         onChange={() =>
-          price !== "4" ? handlePriceFilter("4") : handlePriceFilter("")
+          price !== "4" ? handleFilter("price", "4") : handleFilter("price", "")
         }
       />
       <span> $$$$</span>
