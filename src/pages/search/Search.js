@@ -49,65 +49,74 @@ export const Search = () => {
     setIsLoading(true);
     let results;
 
-    if (priceQuery && ratingQuery) {
-      //
-    }
-
     switch (key) {
       case "price":
         // Run if value is provided
         if (value) {
-
           // Run if query string is not already in URL
           if (priceQuery) {
-            // Get filtered search results
-            results = await getPriceFilteredResults(findQuery, value);
             // Set key query string value in URL
             searchParams.set(key, value);
-
-            // Else, run if query string is already in URL
-          } else {
             // Get filtered search results
             results = await getPriceFilteredResults(findQuery, value);
+            // Else, run if query string is already in URL
+          } else {
             // Append key query string in URL
             searchParams.append(key, value);
+            // Get filtered search results
+            results = await getPriceFilteredResults(findQuery, value);
+          }
+          // If all filters are applied, get all filtered results and end
+          if (searchParams.has("price") && searchParams.has("rating")) {
+            handleAllFilters();
+            return;
           }
         }
 
         // Else, run if no value is provided
         else {
-          // Get search results with no filter
-          results = await getSearchResults(findQuery);
           // Remove key query string from URL if no key filter selected
           searchParams.delete(key);
+          // If other query strings still exists after deletion, get other filtered results
+          if (searchParams.has("rating")) {
+            results = await getRatingFilteredResults(findQuery, searchParams.get("rating"));
+          }
+          // If other query strings do not exist after deletion, get all search results
+          else {
+            results = await getSearchResults(findQuery);
+          }
         }
         break;
 
+      // Same concept as above
       case "rating":
         if (value) {
           if (ratingQuery) {
-            results = await getRatingFilteredResults(findQuery, value);
             searchParams.set(key, value);
-          } else {
             results = await getRatingFilteredResults(findQuery, value);
+          } else {
             searchParams.append(key, value);
+            results = await getRatingFilteredResults(findQuery, value);
+          }
+
+          if (searchParams.has("price") && searchParams.has("rating")) {
+            handleAllFilters();
+            return;
           }
         }
         else {
-          results = await getSearchResults(findQuery);
           searchParams.delete(key);
+          if (searchParams.has("price")) {
+            results = await getPriceFilteredResults(findQuery, searchParams.get("price"));
+          }
+          else {
+            results = await getSearchResults(findQuery);
+          }
         }
         break;
       default:
         break;
     }
-
-    searchParams.forEach(() => {
-      if (searchParams.has("price") && searchParams.has("rating")) {
-        handleAllFilters();
-        return;
-      }
-    });
 
     setSearchResults(results);
     setIsLoading(false);
@@ -115,7 +124,7 @@ export const Search = () => {
   };
 
   const handleAllFilters = async () => {
-      const results = await getPriceAndRatingFilteredResults(findQuery, priceQuery, ratingQuery);
+      const results = await getPriceAndRatingFilteredResults(findQuery, searchParams.get("price"), searchParams.get("rating"));
 
       setSearchResults(results);
       setIsLoading(false);

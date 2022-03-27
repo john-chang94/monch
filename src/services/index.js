@@ -289,7 +289,6 @@ export const getRatingFilteredResults = async (search, rating) => {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
     // Search for a matching restaurant name and rating
-    console.log(Math.ceil(rating) - 0.01)
     const q1 = query(
       restaurantsRef,
       where("name", "==", search),

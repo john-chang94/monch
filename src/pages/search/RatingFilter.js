@@ -53,7 +53,7 @@ export const RatingFilter = ({ rating, handleFilter }) => (
         name="ratingFilter"
         checked={rating === "5.01"}
         onChange={() =>
-          rating !== "5.01" ? handleFilter("5") : handleFilter("")
+          rating !== "5.01" ? handleFilter("rating", "5") : handleFilter("rating", "")
         }
       />
       <span> {renderStars(5)}</span>

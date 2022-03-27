@@ -14,20 +14,19 @@ export const Filters = ({ price, rating, handleFilter }) => {
         </div>
       </div>
       <div
-        className={`border-bottom border-x p-1 flex ${
+        className={`border-bottom border-x p-1 ${
           !showFilters && "hide-filters-content"
         }`}
       >
-        <div>
-          <p>Price</p>
-          <PriceFilter price={price} handleFilter={handleFilter} />
-        </div>
-        <div className="ml-3">
-          <p>Rating</p>
-          <RatingFilter
-            rating={rating}
-            handleFilter={handleFilter}
-          />
+        <div className="flex">
+          <div>
+            <p>Price</p>
+            <PriceFilter price={price} handleFilter={handleFilter} />
+          </div>
+          <div className="ml-3">
+            <p>Rating</p>
+            <RatingFilter rating={rating} handleFilter={handleFilter} />
+          </div>
         </div>
       </div>
     </>
