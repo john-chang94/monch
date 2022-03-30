@@ -5,6 +5,7 @@ import {
   getRestaurant,
   getReviews,
   getRestaurantReviewImages,
+  getUserById,
 } from "../../services";
 
 import { RestaurantDetails } from "./RestaurantDetails";
@@ -18,13 +19,15 @@ export const Restaurant = () => {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [reviewImages, setReviewImages] = useState([]);
+  const [user, setUser] = useState(null);
   const [userHasReview, setUserHasReview] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const { restaurantId } = useParams();
-  const { user } = useAuth();
+  const { activeUser } = useAuth();
 
   const handleFetchData = async () => {
+    const user = await getUserById(activeUser.uid);
     const restaurant = await getRestaurant(restaurantId);
     const reviews = await getReviews(restaurantId);
     const reviewImages = await getRestaurantReviewImages(restaurantId);
@@ -50,6 +53,7 @@ export const Restaurant = () => {
       setReviewImages(images);
     }
 
+    setUser(user);
     setRestaurant(restaurant);
     setReviews(reviews);
     setIsLoading(false);

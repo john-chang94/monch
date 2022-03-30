@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
@@ -7,18 +7,28 @@ import { useAuth } from "../contexts/AuthContext";
 
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
+import { getUserById } from "../services";
 
 export const Header = () => {
-  const { user, setUser, setActiveUser } = useAuth();
+  const [user, setUser] = useState(null);
+  const { activeUser, setActiveUser } = useAuth();
 
   const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOut(auth);
-    setUser(null);
     setActiveUser(null);
     navigate(ROUTES.HOME);
   };
+
+  useEffect(() => {
+    async function fetchUser() {
+      const user = await getUserById(activeUser.uid);
+      setUser(user);
+    }
+
+    fetchUser();
+  }, [])
 
   return (
     <header className="flex justify-between align-center grey-lighten-4 bg-green-darken-3">

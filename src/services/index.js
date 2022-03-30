@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 import {
   addDoc,
   getDoc,
@@ -372,6 +372,55 @@ export const getPriceAndRatingFilteredResults = async (
     console.log(err.message);
   }
 };
+
+export const uploadFile = async (category, file) => {
+  try {
+    const imageRef = ref(storage, `images/${category}/${file.name}`);
+    const snapshot = await uploadBytes(imageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    
+    return url;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+export const deleteFile = (url) => {
+  try {
+    // Get image ref from url, does not have to be file name :')
+    const imageRef = ref(storage, url)
+    // Delete file from firebase
+    deleteObject(imageRef)
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+export const updateUserImage = async (docId, file) => {
+  try {
+    const userRef = doc(db, "users", docId);
+    const userSnap = await getDoc(userRef);
+    const userDoc = userSnap.data();
+
+    if (userDoc) {
+      const url = await uploadFile("users", file);
+      // Delete old image from storage if not the default
+      if (!userDoc.profileImgDefault) {
+        deleteFile(userDoc.profileImg);
+      }
+      // Update user profile image and set default to false
+      // for reference purposes used above
+      await updateDoc(userRef, {
+        profileImg: url,
+        profileImgDefault: false
+      })
+
+    }
+
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 
 export const addReview = async (review, images) => {
   try {

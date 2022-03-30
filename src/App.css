@@ -138,13 +138,14 @@ header {
 
 .modal {
   position: absolute;
-  margin-top: 20vh;
+  margin-top: 1rem;
   left: 0;
   right: 0;
   margin-right: auto;
   margin-left: auto;
   text-align: center;
   width: 80%;
+  padding: 15px 0;
   background-color: white;
 }
 

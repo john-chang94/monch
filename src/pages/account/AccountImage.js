@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { CSSTransition } from "react-transition-group";
+import { getUserById, updateUserImage } from "../../services";
 
-export const AccountImage = () => {
-  const [image, setImage] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+export const AccountImage = ({ user, setUser }) => {
+  const [showModal, setShowModal] = useState(true);
+
+  const handleUpdatePhoto = async (e) => {
+    await updateUserImage(user.docId, e.target.files[0]);
+    const updated = await getUserById(user.userId);
+    setUser(updated);
+    setShowModal(false);
+  }
 
   return (
     <div>
       <div className="flex flex-col align-center mt-3">
         <img
-          src="https://firebasestorage.googleapis.com/v0/b/monch-63774.appspot.com/o/images%2Fusers%2Fperson-blank.png?alt=media&token=844dd72d-aa88-4f08-863d-aaf03bb1dfab"
+          src={user.profileImg}
           alt="user profile"
           className="account-img"
         />
@@ -17,7 +24,7 @@ export const AccountImage = () => {
           className="btn-med mt-3 pointer-no-u hovered"
           onClick={() => setShowModal(true)}
         >
-          Upload...
+          Edit
         </button>
       </div>
       <CSSTransition
@@ -33,10 +40,14 @@ export const AccountImage = () => {
           ></div>
           <div className="modal">
             <div className="p-2">
-              <p>User's image</p>
+            <img
+                src={user.profileImg}
+                alt="user profile"
+                className="account-img"
+            />
             </div>
             <div className="p-2">
-              <p>Upload image</p>
+              <input type="file" onChange={handleUpdatePhoto} />
             </div>
           </div>
         </div>

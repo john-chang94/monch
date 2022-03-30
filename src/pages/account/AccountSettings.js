@@ -31,7 +31,23 @@ export const AccountSettings = ({ user, setUser }) => {
     setShowEditAccount(true);
   };
 
+  const handleCancelEditAccount = () => {
+    setError("");
+    setShowEditAccount(false);
+  }
+
   const handleUpdateAccount = async () => {
+    // Check if any inputs are empty
+    if (!firstName || !lastName || !email) {
+      setError("Missing data");
+      return;
+    }
+    // Check if email is valid
+    if (!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email))) {
+      setError("Invalid email");
+      return;
+    }
+
     const body = { firstName, lastName, email, userId: user.userId };
     await updateUser(user.docId, body);
 
@@ -39,6 +55,7 @@ export const AccountSettings = ({ user, setUser }) => {
     const updatedUser = await getUserById(user.userId);
     setUser(updatedUser);
     setShowEditAccount(false);
+    setError("");
   };
 
   const handleUpdatePassword = async () => {}
@@ -141,12 +158,13 @@ export const AccountSettings = ({ user, setUser }) => {
       <div className="my-2">
         <p>Email Address</p>
         <input
-          type="text"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="form-input"
         />
       </div>
+      {error && <p className="my-2 red">{error}</p>}
       <button
         onClick={handleUpdateAccount}
         className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u mt-2"
@@ -154,7 +172,7 @@ export const AccountSettings = ({ user, setUser }) => {
         Save
       </button>
       <button
-        onClick={() => setShowEditAccount(false)}
+        onClick={handleCancelEditAccount}
         className="btn-med pointer-no-u ml-5"
       >
         Cancel
