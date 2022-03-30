@@ -10,7 +10,7 @@ export const Account = () => {
 
   return user ? (
     <div>
-        {/* <AccountImage /> */}
+        <AccountImage />
         <AccountSettings user={user} setUser={setUser} />
     </div>
   ) : (

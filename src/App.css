@@ -56,6 +56,10 @@ header {
   width: 60%;
 }
 
+.image-gallery-image {
+  max-height: 500px !important;
+}
+
 .account-tabs {
   width: 100%;
   display: flex;
@@ -117,6 +121,49 @@ header {
 
 .hide-filters-content {
   display: none;
+}
+
+.account-img {
+  max-height: 150px;
+}
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal {
+  position: absolute;
+  margin-top: 20vh;
+  left: 0;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+  width: 80%;
+  background-color: white;
+}
+
+.modal-fade-enter {
+  opacity: 0;
+}
+
+.modal-fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.modal-fade-exit {
+  opacity: 1;
+}
+
+.modal-fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
 }
 
 footer {
@@ -952,7 +999,7 @@ select {
     padding: 0 4%;
   }
   .img-gallery {
-    width: 100%;
+    width: 90%;
   }
 }
 

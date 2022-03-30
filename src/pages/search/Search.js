@@ -52,37 +52,45 @@ export const Search = () => {
     switch (key) {
       case "price":
         // Run if value is provided
-        if (value) {
+        if (value)
+        {
           // Run if query string is not already in URL
-          if (priceQuery) {
-            // Set key query string value in URL
+          if (priceQuery)
+          {
+            // Set query string value in URL
             searchParams.set(key, value);
             // Get filtered search results
             results = await getPriceFilteredResults(findQuery, value);
             // Else, run if query string is already in URL
-          } else {
-            // Append key query string in URL
+          }
+          else
+          {
+            // Append query string in URL
             searchParams.append(key, value);
             // Get filtered search results
             results = await getPriceFilteredResults(findQuery, value);
           }
-          // If all filters are applied, get all filtered results and end
-          if (searchParams.has("price") && searchParams.has("rating")) {
+          // If all filters are applied after setting/appending, get all filtered results
+          if (searchParams.has("price") && searchParams.has("rating"))
+          {
             handleAllFilters();
-            return;
           }
         }
-
         // Else, run if no value is provided
-        else {
-          // Remove key query string from URL if no key filter selected
+        else
+        {
           searchParams.delete(key);
-          // If other query strings still exists after deletion, get other filtered results
-          if (searchParams.has("rating")) {
-            results = await getRatingFilteredResults(findQuery, searchParams.get("rating"));
+          // If other query strings still exist after deletion, get other filtered results
+          if (searchParams.has("rating"))
+          {
+            results = await getRatingFilteredResults(
+              findQuery,
+              searchParams.get("rating")
+            );
           }
           // If other query strings do not exist after deletion, get all search results
-          else {
+          else
+          {
             results = await getSearchResults(findQuery);
           }
         }
@@ -90,26 +98,35 @@ export const Search = () => {
 
       // Same concept as above
       case "rating":
-        if (value) {
-          if (ratingQuery) {
+        if (value)
+        {
+          if (ratingQuery)
+          {
             searchParams.set(key, value);
             results = await getRatingFilteredResults(findQuery, value);
-          } else {
+          }
+          else
+          {
             searchParams.append(key, value);
             results = await getRatingFilteredResults(findQuery, value);
           }
 
           if (searchParams.has("price") && searchParams.has("rating")) {
             handleAllFilters();
-            return;
           }
         }
-        else {
+        else
+        {
           searchParams.delete(key);
-          if (searchParams.has("price")) {
-            results = await getPriceFilteredResults(findQuery, searchParams.get("price"));
+          if (searchParams.has("price"))
+          {
+            results = await getPriceFilteredResults(
+              findQuery,
+              searchParams.get("price")
+            );
           }
-          else {
+          else
+          {
             results = await getSearchResults(findQuery);
           }
         }
@@ -124,13 +141,15 @@ export const Search = () => {
   };
 
   const handleAllFilters = async () => {
-      const results = await getPriceAndRatingFilteredResults(findQuery, searchParams.get("price"), searchParams.get("rating"));
+      const results = await getPriceAndRatingFilteredResults(
+        findQuery,
+        searchParams.get("price"),
+        searchParams.get("rating")
+      );
 
       setSearchResults(results);
       setIsLoading(false);
       navigate(`/search?${searchParams}`);
-
-      return;
   }
 
   useEffect(() => {
@@ -142,7 +161,6 @@ export const Search = () => {
 
       // Get search results with no filter
       const results = await getSearchResults(findQuery);
-      // const results = await getRatingFilteredResults(findQuery, 4.14);
       setSearchResults(results);
       setIsLoading(false);
     }
@@ -160,7 +178,11 @@ export const Search = () => {
           <em>Results: {searchResults.length}</em>
         </p>
       </div>
-      <Filters price={priceQuery} rating={ratingQuery} handleFilter={handleFilter} />
+      <Filters
+        price={priceQuery}
+        rating={ratingQuery}
+        handleFilter={handleFilter}
+      />
       {isLoading ? (
         <div className="mt-5 text-center">
           <SpinnerCircular color="#36ad47" size={80} />

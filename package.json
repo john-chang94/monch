@@ -12,6 +12,7 @@
     "react-image-gallery": "^1.2.7",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
+    "react-transition-group": "^4.4.2",
     "spinners-react": "^1.0.6",
     "web-vitals": "^2.1.4"
   },
