@@ -23,7 +23,7 @@ html, body {
 }
 
 .hovered:hover {
-  background-color:rgba(0, 0, 0, 0.15);
+  background-color:rgba(0, 0, 0, 0.12);
   /* opacity: .85; */
 }
 
@@ -144,9 +144,28 @@ header {
   margin-right: auto;
   margin-left: auto;
   text-align: center;
-  width: 80%;
-  padding: 15px 0;
-  background-color: white;
+  width: 50%;
+  padding: 25px 0;
+  background-color: rgb(240, 240, 240);
+}
+
+.modal i {
+  font-size: 24px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: 10px;
+  margin-top: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.modal i:hover {
+  color: gray;
+}
+
+.modal img {
+  max-height: 225px;
 }
 
 .modal-fade-enter {
@@ -948,6 +967,9 @@ select {
   .img-gallery {
     width: 80%;
   }
+  .modal {
+    width: 70%;
+  }
 }
 
 @media (max-width: 740px) {
@@ -1001,6 +1023,9 @@ select {
   }
   .img-gallery {
     width: 90%;
+  }
+  .modal {
+    width: 80%;
   }
 }
 

@@ -20,9 +20,13 @@ export const Account = () => {
   }, [])
 
   return user ? (
-    <div>
+    <div className="grid">
+      <div className="m12 l4">
         <AccountImage user={user} setUser={setUser} />
+      </div>
+      <div className="m12 l8">
         <AccountSettings user={user} setUser={setUser} />
+      </div>
     </div>
   ) : (
     <div className="mt-5 text-center">

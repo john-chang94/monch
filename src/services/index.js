@@ -414,9 +414,31 @@ export const updateUserImage = async (docId, file) => {
         profileImg: url,
         profileImgDefault: false
       })
-
     }
 
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+export const deleteUserImage = async (docId) => {
+  try {
+    const userRef = doc(db, "users", docId);
+    const userSnap = await getDoc(userRef);
+    const userDoc = userSnap.data();
+
+    if (userDoc) {
+      // Delete old image from storage
+      deleteFile(userDoc.profileImg);
+      // Get default image ref
+      const defaultImgRef = ref(storage, "images/users/person-blank.png");
+      const url = await getDownloadURL(defaultImgRef);
+      // Update user profile image and set default to true
+      await updateDoc(userRef, {
+        profileImg: url,
+        profileImgDefault: true
+      })
+    }
   } catch (err) {
     console.log(err.message);
   }
