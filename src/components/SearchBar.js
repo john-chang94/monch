@@ -106,7 +106,7 @@ export const SearchBar = () => {
           <li
             key={i}
             id={i} // Referred to when setting search input value with arrow keys
-            className={`p-1 ${cursor === i && "bg-grey-lighten-3"} pointer-no-u`}
+            className={`p-1 ${cursor === i && "bg-grey-lighten-3"} pointer-no-dec`}
             onClick={() => handleClick(suggestion.query)}
             onMouseEnter={() => handleSetSearchValue(true, suggestion.query, i)}
             onMouseLeave={() => handleSetSearchValue(false, suggestion.query, i)}

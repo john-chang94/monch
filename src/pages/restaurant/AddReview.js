@@ -47,7 +47,7 @@ export const AddReview = ({
     for (let i = 0; i < 5; i++) {
       stars.push(
         <i
-          className="far fa-star green-darken-2 pointer-no-u"
+          className="far fa-star green-darken-2 pointer-no-dec"
           key={i}
           onClick={() => handleRating(i)}
         />
@@ -96,7 +96,7 @@ export const AddReview = ({
               <p>
                 You already posted a review.
                 <br />
-                <Link to={`/account/${user.userId}`} className="text-no-u blue-darken-2">
+                <Link to={`/account/${user.userId}/reviews`} className="no-dec blue-darken-2">
                   Manage your reviews here
                 </Link>
               </p>
@@ -136,7 +136,7 @@ export const AddReview = ({
           ) : (
             <div>
             <button
-                className={`btn-med mt-3 ${!userHasReview && "grey-lighten-4 bg-green-darken-3 pointer-no-u"}`}
+                className={`btn-med mt-3 ${!userHasReview && "grey-lighten-4 bg-green-darken-3 pointer-no-dec"}`}
                 onClick={handleSubmit}
                 disabled={userHasReview}
               >
@@ -147,7 +147,7 @@ export const AddReview = ({
         </div>
       ) : (
         <p className="py-5 ml-2">
-          <Link to={ROUTES.SIGN_IN} className="text-no-u blue-darken-2">
+          <Link to={ROUTES.SIGN_IN} className="no-dec blue-darken-2">
             Sign in
           </Link>{" "}
           to leave a review

@@ -32,7 +32,7 @@ export const Header = () => {
 
   return (
     <header className="flex justify-between align-center grey-lighten-4 bg-green-darken-3">
-      <Link to={ROUTES.HOME} className="grey-lighten-4 text-no-u text-8">
+      <Link to={ROUTES.HOME} className="grey-lighten-4 no-dec text-8">
         Monch!
       </Link>
       <div>
@@ -40,7 +40,7 @@ export const Header = () => {
           <div className="flex align-center">
             <Link
               to={`/account/${user.userId}`}
-              className="mr-4 grey-lighten-4 text-no-u border-round border-solid-1"
+              className="mr-4 grey-lighten-4 no-dec border-round border-solid-1"
             >
               <p className="header-initials">
                 {user.firstName[0]}
@@ -48,7 +48,7 @@ export const Header = () => {
               </p>
             </Link>
             <div>
-              <p className="pointer-no-u" onClick={handleSignOut}>
+              <p className="pointer-no-dec" onClick={handleSignOut}>
                 Sign Out
               </p>
             </div>
@@ -57,13 +57,13 @@ export const Header = () => {
           <div>
             <Link
               to={ROUTES.SIGN_IN}
-              className="grey-lighten-4 text-no-u pointer-no-u mr-5"
+              className="grey-lighten-4 no-dec pointer-no-dec mr-5"
             >
               Sign In
             </Link>
             <Link
               to={ROUTES.REGISTER}
-              className="grey-lighten-4 text-no-u pointer-no-u"
+              className="grey-lighten-4 no-dec pointer-no-dec"
             >
               Register
             </Link>

@@ -17,7 +17,7 @@ html, body {
   text-decoration: underline;
 }
 
-.pointer-no-u:hover {
+.pointer-no-dec:hover {
   cursor: pointer;
   text-decoration: none;
 }
@@ -578,7 +578,7 @@ footer {
 .text-u {
   text-decoration: underline;
 }
-.text-no-u {
+.no-dec {
   text-decoration: none;
 }
 .text-1 {

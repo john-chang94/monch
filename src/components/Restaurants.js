@@ -9,7 +9,7 @@ export const Restaurants = ({ restaurants }) => {
       {restaurants.length ?
         restaurants.map(
           ({ docId, name, categories, rating, totalRatings, price }, i) => (
-            <Link to={`/restaurants/${docId}`} key={i} className="black text-no-u">
+            <Link to={`/restaurants/${docId}`} key={i} className="black no-dec">
               <RestaurantCard
                 name={name}
                 categories={categories}

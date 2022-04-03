@@ -102,7 +102,7 @@ export const Register = () => {
       {error && <p className="red">{error}</p>}
       <div className="text-center">
         <p>Have an account?</p>
-        <Link to={ROUTES.SIGN_IN} className="blue-darken-2 text-no-u pointer">Sign in here</Link>
+        <Link to={ROUTES.SIGN_IN} className="blue-darken-2 no-dec pointer">Sign in here</Link>
       </div>
     </div>
   );

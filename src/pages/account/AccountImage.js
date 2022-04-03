@@ -35,7 +35,7 @@ export const AccountImage = ({ user, setUser }) => {
       <div className="flex flex-col align-center mt-3">
         <img src={user.profileImg} alt="user profile" className="account-img" />
         <button
-          className="btn-med mt-3 pointer-no-u hovered"
+          className="btn-med mt-3 pointer-no-dec hovered"
           onClick={() => setShowModal(true)}
         >
           Edit

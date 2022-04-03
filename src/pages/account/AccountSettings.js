@@ -83,14 +83,14 @@ export const AccountSettings = ({ user, setUser }) => {
       </div>
       <div className="mt-5">
         <button
-          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u"
+          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec"
           onClick={handleShowEditAccount}
         >
           EDIT
         </button>
       </div>
       <div className="mt-3">
-        <Link to={`/account/${user.userId}/reviews`} className="text-no-u blue-darken-2">
+        <Link to={`/account/${user.userId}/reviews`} className="no-dec blue-darken-2">
           Manage reviews
         </Link>
       </div>
@@ -134,7 +134,7 @@ export const AccountSettings = ({ user, setUser }) => {
       <div className="mt-5">
         <button
         onClick={handleUpdatePassword}
-          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u">
+          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec">
           Update
         </button>
       </div>
@@ -173,13 +173,13 @@ export const AccountSettings = ({ user, setUser }) => {
       {error && <p className="my-2 red">{error}</p>}
       <button
         onClick={handleUpdateAccount}
-        className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-u mt-2"
+        className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec mt-2"
       >
         Save
       </button>
       <button
         onClick={handleCancelEditAccount}
-        className="btn-med pointer-no-u ml-5"
+        className="btn-med pointer-no-dec ml-5"
       >
         Cancel
       </button>
@@ -190,13 +190,13 @@ export const AccountSettings = ({ user, setUser }) => {
     <div>
       <div className="account-tabs">
         <div
-          className="w-100 border-solid-1 py-2 pointer-no-u hovered"
+          className="w-100 border-solid-1 py-2 pointer-no-dec hovered"
           onClick={() => handleTabClick("account")}
         >
           <p>Account</p>
         </div>
         <div
-          className="w-100 border-solid-1 py-2 pointer-no-u hovered"
+          className="w-100 border-solid-1 py-2 pointer-no-dec hovered"
           onClick={() => handleTabClick("security")}
         >
           <p>Security</p>

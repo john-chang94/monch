@@ -8,7 +8,7 @@ export const Filters = ({ price, rating, handleFilter }) => {
   return (
     <>
       <div className="w-100 mt-1" onClick={() => setShowFilters(!showFilters)}>
-        <div className="flex align-center justify-between bg-grey-lighten-2 p-1 pointer-no-u">
+        <div className="flex align-center justify-between bg-grey-lighten-2 p-1 pointer-no-dec">
           <h4 className="grey-darken-4">Filters</h4>
           <i className={`mr-2 fas ${showFilters ? "fa-minus" : "fa-plus"}`} />
         </div>
