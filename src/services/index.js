@@ -165,6 +165,23 @@ export const getReviews = async (restaurantId) => {
   }
 };
 
+export const getReviewsByUser = async (userId) => {
+  console.log("GET REVIEWS BY USER");
+  try {
+    let reviews = [];
+    const reviewsRef = collection(db, "reviews");
+    const q = query(reviewsRef, where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      reviews.push(doc.data());
+    })
+
+    return reviews;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 export const getRestaurantReviewImages = async (restaurantId) => {
   console.log("GET RESTAURANT REVIEW IMAGES");
   try {

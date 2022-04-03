@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getUserById, updateUser } from "../../services";
+import { Link } from "react-router-dom";
 
 export const AccountSettings = ({ user, setUser }) => {
   const [firstName, setFirstName] = useState("");
@@ -87,6 +88,11 @@ export const AccountSettings = ({ user, setUser }) => {
         >
           EDIT
         </button>
+      </div>
+      <div className="mt-3">
+        <Link to={`/account/${user.userId}/reviews`} className="text-no-u blue-darken-2">
+          Manage reviews
+        </Link>
       </div>
     </>
   );

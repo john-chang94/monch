@@ -14,6 +14,7 @@ import { Footer } from "./components/Footer";
 
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { SuggestionsContextProvider } from "./contexts/SuggestionsContext";
+import { UserReviews } from "./pages/account/UserReviews";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                   <Route path={ROUTES.SEARCH} element={<Search />} />
                   <Route path={ROUTES.RESTAURANT} element={<Restaurant />} />
                   <Route path={ROUTES.ACCOUNT} element={<Account />} />
+                  <Route path={ROUTES.USER_REVIEWS} element={<UserReviews />} />
                 </Routes>
               </div>
             </div>
