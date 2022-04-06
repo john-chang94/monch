@@ -186,6 +186,28 @@ header {
   transition: opacity 300ms;
 }
 
+.edit-review-img {
+  max-height: 100px;
+}
+
+.fade-half {
+  opacity: .5;
+}
+
+.delete-img {
+  position: absolute;
+  z-index: 10;
+  top: 0; left: 0; bottom: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-img i {
+  font-size: 28px;
+  cursor: pointer;
+}
+
 footer {
   padding: 30px 0;
 }
@@ -773,6 +795,12 @@ select {
 
 .inline-block {
   display: inline-block;
+}
+.hide {
+  display: none;
+}
+.block {
+  display: block;
 }
 .inline {
   display: inline;

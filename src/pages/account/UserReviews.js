@@ -34,7 +34,7 @@ export const UserReviews = () => {
           <Link to={`/account/${userId}`} className="no-dec pointer black">
             <i className="fas fa-arrow-left my-2"></i> Account
           </Link>
-          <Reviews reviews={reviews} />
+          <Reviews reviews={reviews} isUser={true} />
         </div>
       )}
     </div>

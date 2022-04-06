@@ -1,5 +1,10 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  deleteObject,
+} from "firebase/storage";
 import {
   addDoc,
   getDoc,
@@ -10,7 +15,9 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  arrayRemove,
   orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { auth, db, storage } from "../config/firebase";
@@ -173,14 +180,31 @@ export const getReviewsByUser = async (userId) => {
     const q = query(reviewsRef, where("userId", "==", userId));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      reviews.push(doc.data());
-    })
+      let obj = {
+        docId: doc.id,
+        ...doc.data(),
+      };
+      reviews.push(obj);
+    });
 
     return reviews;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
+
+export const getReviewById = async (docId) => {
+  try {
+    console.log("GET REVIEW BY ID");
+    const reviewRef = doc(db, "reviews", docId);
+    const reviewSnap = await getDoc(reviewRef);
+    const review = { ...reviewSnap.data() };
+
+    return review;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 export const getRestaurantReviewImages = async (restaurantId) => {
   console.log("GET RESTAURANT REVIEW IMAGES");
@@ -395,23 +419,23 @@ export const uploadFile = async (category, file) => {
     const imageRef = ref(storage, `images/${category}/${file.name}`);
     const snapshot = await uploadBytes(imageRef, file);
     const url = await getDownloadURL(snapshot.ref);
-    
+
     return url;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
-export const deleteFile = (url) => {
+export const deleteFile = async (url) => {
   try {
     // Get image ref from url, does not have to be file name :')
-    const imageRef = ref(storage, url)
+    const imageRef = ref(storage, url);
     // Delete file from firebase
-    deleteObject(imageRef)
+    await deleteObject(imageRef);
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 export const updateUserImage = async (docId, file) => {
   try {
@@ -429,14 +453,13 @@ export const updateUserImage = async (docId, file) => {
       // for reference purposes used above
       await updateDoc(userRef, {
         profileImg: url,
-        profileImgDefault: false
-      })
+        profileImgDefault: false,
+      });
     }
-
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 export const deleteUserImage = async (docId) => {
   try {
@@ -453,13 +476,13 @@ export const deleteUserImage = async (docId) => {
       // Update user profile image and set default to true
       await updateDoc(userRef, {
         profileImg: url,
-        profileImgDefault: true
-      })
+        profileImgDefault: true,
+      });
     }
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 export const addReview = async (review, images) => {
   try {
@@ -517,52 +540,46 @@ export const addReview = async (review, images) => {
   }
 };
 
-// export const addReviewImage = async (reviewId, image) => {
-//   try {
+export const addReviewImage = async (reviewId, restaurantId, image) => {
+  try {
+    // Upload image file to firebase
+    const reviewRef = doc(db, "reviews", reviewId);
+    const url = await uploadFile("reviews", image);
+    // Update images array in review
+    await updateDoc(reviewRef, {
+      images: arrayUnion(url),
+    });
+    // Add image to reviewImages collection
+    const imageBody = {
+      dateAdded: Date.now(),
+      restaurantId,
+      url,
+    };
+    await addDoc(collection(db, "reviewImages"), imageBody);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
-//   } catch (err) {
-//     console.log(err.message);
-//   }
-// }
-
-//   const addReview = async (id) => {
-//     let review = {
-//       reviewId: "12347",
-//       title: "review title",
-//       body: "review body",
-//       images: [],
-//     };
-//     const restaurantRef = doc(db, "restaurants", id);
-//     await updateDoc(restaurantRef, {
-//       reviews: arrayRemove(review),
-//     });
-//   };
-
-//   const deleteImage = async (id, uri) => {
-//     const reviewRef = doc(db, "reviews", id);
-//     await updateDoc(reviewRef, {
-//       images: arrayRemove(uri),
-//     });
-//   };
-
-//   const getReviewsByUser = async () => {
-//     const reviewsRef = collection(db, "reviews");
-//     const q = query(reviewsRef, where("userId", "==", "user1"));
-//     const snapshot = await getDocs(q);
-//     let arr = [];
-//     snapshot.forEach((doc) => {
-//       console.log(doc.data());
-//       arr.push({ reviewId: doc.id, ...doc.data() });
-//     });
-//     console.log(arr);
-//     setReviews(arr);
-//   };
-
-// const getReviewsByRestaurant = async () => {
-//   const reviewsRef = collection(db, "reviews");
-//   const q = query(reviewsRef, where("restaurantId", "==", "restaurant1"))
-//   const snapshot = await getDocs(q);
-//   snapshot.forEach((doc) => {
-//     console.log(doc.data());
-//   })
-// }
+export const deleteReviewImage = async (reviewId, image) => {
+  try {
+    // Delete image from review
+    const reviewRef = doc(db, "reviews", reviewId);
+    await updateDoc(reviewRef, {
+      images: arrayRemove(image),
+    });
+    // Delete image from reviewImages collection
+    const reviewImageRef = collection(db, "reviewImages");
+    const q = query(reviewImageRef, where("url", "==", image));
+    const qSnapshot = await getDocs(q);
+    // Destructure [reviewImage] because it's in another array
+    const [reviewImage] = qSnapshot.docs.map((doc) => ({
+      docId: doc.id,
+    }));
+    await deleteDoc(doc(db, "reviewImages", reviewImage.docId));
+    // Delete image file from firebase
+    deleteFile(image);
+  } catch (err) {
+    console.log(err);
+  }
+};

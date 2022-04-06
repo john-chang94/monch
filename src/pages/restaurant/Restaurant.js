@@ -80,7 +80,7 @@ export const Restaurant = () => {
         handleFetchData={handleFetchData}
       />
       <hr className="my-4" />
-      <Reviews reviews={reviews} />
+      <Reviews reviews={reviews} isUser={false} />
     </div>
   );
 }

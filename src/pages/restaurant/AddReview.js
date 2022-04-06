@@ -21,8 +21,8 @@ export const AddReview = ({
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
     // Font Awesome for filled and empty stars
-    const filled = "fas fa-star green-darken-2 pointer";
-    const empty = "far fa-star green-darken-2 pointer";
+    const filled = "fas fa-star yellow-darken-2 pointer-no-dec";
+    const empty = "far fa-star yellow-darken-2 pointer-no-dec";
     let stars = [];
 
     for (let i = 0; i < 5; i++) {
@@ -47,7 +47,7 @@ export const AddReview = ({
     for (let i = 0; i < 5; i++) {
       stars.push(
         <i
-          className="far fa-star green-darken-2 pointer-no-dec"
+          className="far fa-star yellow-darken-2 pointer-no-dec"
           key={i}
           onClick={() => handleRating(i)}
         />

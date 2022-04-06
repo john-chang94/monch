@@ -1,7 +1,8 @@
 import React from "react";
 import { renderStars } from "../helpers";
+import { Link } from "react-router-dom";
 
-export const Reviews = ({ reviews }) => (
+export const Reviews = ({ reviews, isUser }) => (
   <div className="reviews">
     {reviews.length > 0 ? (
       reviews.map((review, i) => (
@@ -21,10 +22,23 @@ export const Reviews = ({ reviews }) => (
                 </div>
               ))}
           </div>
-          <p>
-            Reviewer: {review.firstName} {review.lastName}
-          </p>
+          {!isUser && (
+            <p>
+              Reviewer: {review.firstName} {review.lastName}
+            </p>
+          )}
           <p>Date: {new Date(review.date).toLocaleDateString()}</p>
+          {isUser && (
+            <Link
+              to={`/account/${review.userId}/reviews/${review.docId}`}
+              state={review}
+              className="no-dec"
+            >
+              <button className="btn-sm grey-lighten-4 bg-green-darken-3 mt-1 pointer-no-dec">
+                EDIT
+              </button>
+            </Link>
+          )}
         </div>
       ))
     ) : (
