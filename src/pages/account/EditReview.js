@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   addReviewImage,
   deleteReviewImage,
@@ -14,11 +14,12 @@ export const EditReview = () => {
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState([]);
   const [stars, setStars] = useState([]);
+  const [imageIndex, setImageIndex] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { reviewId } = useParams();
+  const { userId, reviewId } = useParams();
 
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
@@ -49,6 +50,8 @@ export const EditReview = () => {
     const updated = await getReviewById(reviewId);
 
     setReview(updated);
+    setIsHovered(false);
+    setImageIndex(null);
     setIsUpdating(false);
   };
 
@@ -61,7 +64,17 @@ export const EditReview = () => {
 
       setReview(updated);
       setIsUpdating(false);
+    } else {
+      setIsHovered(false);
+      setImageIndex(null);
+      setIsUpdating(false);
     }
+  };
+
+  // Handle css change when user hovers mouse over image to delete
+  const handleIsHovered = (imageIndex, isHovered) => {
+    setIsHovered(isHovered);
+    setImageIndex(imageIndex);
   };
 
   const renderInitialStars = (rating) => {
@@ -101,6 +114,14 @@ export const EditReview = () => {
     </div>
   ) : (
     <div>
+      <div className="my-2">
+        <Link
+          to={`/account/${userId}/reviews`}
+          className="no-dec pointer black"
+        >
+          <i className="fas fa-arrow-left" /> Back
+        </Link>
+      </div>
       <p className="my-1">{stars}</p>
       <div>
         <textarea
@@ -110,9 +131,10 @@ export const EditReview = () => {
           className="my-1"
         />
       </div>
-      <div className="my-1">
-        <button>SAVE</button>
+      <div>
+        <button className="btn-sm grey-lighten-4 bg-green-darken-3">SAVE</button>
       </div>
+      <hr className="my-2" />
       <div>
         {isUpdating ? (
           <div className="my-1 text-center">
@@ -120,26 +142,36 @@ export const EditReview = () => {
           </div>
         ) : (
           <>
-            {review?.images &&
-              review.images.map((image, image_i) => (
-                <div
-                  key={image_i}
-                  className="relative"
-                  style={{ maxWidth: "150px" }}
-                  onMouseOver={() => setIsHovered(true)}
-                  onMouseOut={() => setIsHovered(false)}
-                  onClick={() => handleDeleteImage(image)}
-                >
-                  <p className={`${isHovered ? "delete-img" : "hide"}`}>
-                    <i className="fas fa-times" />
-                  </p>
-                  <img
-                    src={image}
-                    alt="user review"
-                    className={`w-100 ${isHovered && "fade-half"}`}
-                  />
-                </div>
-              ))}
+            <div className="grid">
+              {review?.images &&
+                review?.images.map((image, image_i) => (
+                  <div
+                    key={image_i}
+                    className="relative xs12 s6 m4 l2"
+                    onMouseOver={() => handleIsHovered(image_i, true)}
+                    onMouseOut={() => handleIsHovered(image_i, false)}
+                    onClick={() => handleDeleteImage(image)}
+                  >
+                    <p
+                      className={`${
+                        isHovered && image_i === imageIndex
+                          ? "delete-img"
+                          : "hide"
+                      }`}
+                    >
+                      <i className="fas fa-times" />
+                    </p>
+                    <img
+                      src={image}
+                      alt="user review"
+                      className={`w-100 ${
+                        isHovered && image_i === imageIndex && "fade-half"
+                      }`}
+                    />
+                  </div>
+                ))}
+            </div>
+            <hr className="my-2" />
             <div>
               <p>Add images (optional)</p>
               <input

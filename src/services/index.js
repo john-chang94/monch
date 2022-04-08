@@ -508,31 +508,19 @@ export const addReview = async (review, images) => {
       const reviewRef = doc(db, "reviews", addedReview.id);
       // Repeat upload and update review process for each image provided
       for (let i = 0; i < images.length; i++) {
-        // Make a ref to the image path w/ file name to upload
-        const reviewImagesRef = ref(
-          storage,
-          `images/reviews/${images[i].name}`
-        );
-        // Upload image file to the review image ref
-        uploadBytes(reviewImagesRef, images[i])
-          .then(async (snapshot) => {
-            // Get uploaded image url
-            const url = await getDownloadURL(snapshot.ref);
-            // Add image url to review images array
-            await updateDoc(reviewRef, {
-              images: arrayUnion(url),
-            });
-            // Add image to reviewImages collection for rendering all images
-            const imageBody = {
-              dateAdded: review.date,
-              restaurantId: review.restaurantId,
-              url: url,
-            };
-            await addDoc(collection(db, "reviewImages"), imageBody);
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
+        // Upload image file to firebase
+        const url = await uploadFile("reviews", images[i]);
+        // Add image url to review images array
+        await updateDoc(reviewRef, {
+          images: arrayUnion(url),
+        });
+        // Add image to reviewImages collection for rendering all images
+        const imageBody = {
+          dateAdded: review.date,
+          restaurantId: review.restaurantId,
+          url: url,
+        };
+        await addDoc(collection(db, "reviewImages"), imageBody);
       }
     }
   } catch (err) {

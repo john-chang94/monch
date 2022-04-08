@@ -32,7 +32,7 @@ export const UserReviews = () => {
       ) : (
         <div>
           <Link to={`/account/${userId}`} className="no-dec pointer black">
-            <i className="fas fa-arrow-left my-2"></i> Account
+            <i className="fas fa-arrow-left mt-2 mb-1" /> Account
           </Link>
           <Reviews reviews={reviews} isUser={true} />
         </div>

@@ -22,13 +22,13 @@ export const Reviews = ({ reviews, isUser }) => (
                 </div>
               ))}
           </div>
-          {!isUser && (
+          {!isUser && ( // Hide reviewer name if location is user account
             <p>
               Reviewer: {review.firstName} {review.lastName}
             </p>
           )}
           <p>Date: {new Date(review.date).toLocaleDateString()}</p>
-          {isUser && (
+          {isUser && ( // Display edit button if location is user account
             <Link
               to={`/account/${review.userId}/reviews/${review.docId}`}
               state={review}
