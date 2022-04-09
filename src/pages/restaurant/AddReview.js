@@ -17,6 +17,7 @@ export const AddReview = ({
   const [stars, setStars] = useState([]);
   const [rating, setRating] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
@@ -58,6 +59,12 @@ export const AddReview = ({
   };
 
   const handleSubmit = async () => {
+    // Do not run if review images reaches max limit
+    if (images.length > 6) {
+      setError("Limit of 6 images per review");
+      return;
+    }
+
     setIsSubmitting(true);
     const review = {
       rating,
@@ -66,9 +73,9 @@ export const AddReview = ({
       userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
-      date: Date.now()
+      date: Date.now(),
     };
-    
+
     await addReview(review, images);
 
     // Add a delay before refetching data so firebase can finish uploading images
@@ -79,7 +86,9 @@ export const AddReview = ({
       setImages([]);
       renderEmptyStars();
       setIsSubmitting(false);
-    }, images.length*1000); // Add delay for every image that is uploaded
+    }, images.length * 1000); // Add delay for every image that is uploaded
+
+    setError("");
   };
 
   useEffect(() => {
@@ -96,7 +105,10 @@ export const AddReview = ({
               <p>
                 You already posted a review.
                 <br />
-                <Link to={`/account/${user.userId}/reviews`} className="no-dec blue-darken-2">
+                <Link
+                  to={`/account/${user.userId}/reviews`}
+                  className="no-dec blue-darken-2"
+                >
                   Manage your reviews here
                 </Link>
               </p>
@@ -129,19 +141,21 @@ export const AddReview = ({
           </div>
           {isSubmitting ? (
             <div className="my-3">
-              <SpinnerCircular
-                color="#36ad47"
-              />
+              <SpinnerCircular color="#36ad47" />
             </div>
           ) : (
             <div>
-            <button
-                className={`btn-med mt-3 ${!userHasReview && "grey-lighten-4 bg-green-darken-3 pointer-no-dec"}`}
+              <button
+                className={`btn-med mt-3 ${
+                  !userHasReview &&
+                  "grey-lighten-4 bg-green-darken-3 pointer-no-dec"
+                }`}
                 onClick={handleSubmit}
                 disabled={userHasReview}
               >
                 SUBMIT
               </button>
+              {error && <p className="red">{error}</p>}
             </div>
           )}
         </div>

@@ -22,6 +22,7 @@ export const AccountSettings = ({ user, setUser }) => {
     if (tab === "security") {
       setShowSecurity(true);
       setShowAccount(false);
+      setShowEditAccount(false);
     }
   };
 
