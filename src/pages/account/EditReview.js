@@ -4,6 +4,7 @@ import {
   addReviewImage,
   deleteReviewImage,
   getReviewById,
+  updateReview,
 } from "../../services";
 
 import { SpinnerCircular } from "spinners-react";
@@ -18,6 +19,7 @@ export const EditReview = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { userId, reviewId } = useParams();
 
@@ -45,29 +47,29 @@ export const EditReview = () => {
   };
 
   const handleAddImage = async (image) => {
-    setIsUpdating(true);
+    setIsUploading(true);
     await addReviewImage(reviewId, review.restaurantId, image);
     const updated = await getReviewById(reviewId);
 
     setReview(updated);
     setIsHovered(false);
     setImageIndex(null);
-    setIsUpdating(false);
+    setIsUploading(false);
   };
 
   const handleDeleteImage = async (image) => {
-    setIsUpdating(true);
+    setIsUploading(true);
     const doDelete = window.confirm("Delete image from review?");
     if (doDelete) {
       await deleteReviewImage(reviewId, image);
       const updated = await getReviewById(reviewId);
 
       setReview(updated);
-      setIsUpdating(false);
+      setIsUploading(false);
     } else {
       setIsHovered(false);
       setImageIndex(null);
-      setIsUpdating(false);
+      setIsUploading(false);
     }
   };
 
@@ -75,6 +77,15 @@ export const EditReview = () => {
   const handleIsHovered = (imageIndex, isHovered) => {
     setIsHovered(isHovered);
     setImageIndex(imageIndex);
+  };
+
+  const handleUpdateReview = async () => {
+    setIsUpdating(true);
+    await updateReview(reviewId, rating, details);
+    const updated = await getReviewById(reviewId);
+
+    setReview(updated);
+    setIsUpdating(false);
   };
 
   const renderInitialStars = (rating) => {
@@ -129,14 +140,21 @@ export const EditReview = () => {
           onChange={(e) => setDetails(e.target.value)}
           rows={5}
           className="my-1"
+          disabled={isUpdating}
         />
       </div>
       <div>
-        <button className="btn-sm grey-lighten-4 bg-green-darken-3">SAVE</button>
+        <button
+          className="btn-sm grey-lighten-4 bg-green-darken-3 pointer-no-dec"
+          onClick={handleUpdateReview}
+          disabled={isUpdating}
+        >
+          SAVE
+        </button>
       </div>
       <hr className="my-2" />
       <div>
-        {isUpdating ? (
+        {isUploading ? (
           <div className="my-1 text-center">
             <SpinnerCircular color="#36ad47" />
           </div>

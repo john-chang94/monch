@@ -528,6 +528,18 @@ export const addReview = async (review, images) => {
   }
 };
 
+export const updateReview = async (reviewId, rating, details) => {
+  try {
+    const reviewRef = doc(db, "reviews", reviewId);
+    await updateDoc(reviewRef, {
+      rating,
+      details,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const addReviewImage = async (reviewId, restaurantId, image) => {
   try {
     // Upload image file to firebase

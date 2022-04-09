@@ -201,11 +201,11 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .delete-img i {
-  font-size: 28px;
-  cursor: pointer;
+  font-size: 22px;
 }
 
 footer {
