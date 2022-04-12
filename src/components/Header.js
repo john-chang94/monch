@@ -17,18 +17,22 @@ export const Header = () => {
 
   const handleSignOut = () => {
     signOut(auth);
+    setUser(null);
     setActiveUser(null);
     navigate(ROUTES.HOME);
   };
 
   useEffect(() => {
-    async function fetchUser() {
-      const user = await getUserById(activeUser.uid);
-      setUser(user);
+    // Fetch user if signed in
+    if (activeUser) {
+      async function fetchUser() {
+        const user = await getUserById(activeUser.uid);
+        setUser(user);
+      }
+  
+      fetchUser();
     }
-
-    fetchUser();
-  }, [])
+  }, [activeUser])
 
   return (
     <header className="flex justify-between align-center grey-lighten-4 bg-green-darken-3">
@@ -36,7 +40,7 @@ export const Header = () => {
         Monch!
       </Link>
       <div>
-        {user ? (
+        {user ? ( // Render signed in user
           <div className="flex align-center">
             <Link
               to={`/account/${user.userId}`}
@@ -53,7 +57,7 @@ export const Header = () => {
               </p>
             </div>
           </div>
-        ) : (
+        ) : ( // Render general header with auth links
           <div>
             <Link
               to={ROUTES.SIGN_IN}

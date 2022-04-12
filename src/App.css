@@ -177,9 +177,9 @@ header {
   transition: opacity 300ms;
 }
 
-/* .modal-fade-exit {
+.modal-fade-exit {
   opacity: 1;
-} */
+}
 
 .modal-fade-exit-active {
   opacity: 0;

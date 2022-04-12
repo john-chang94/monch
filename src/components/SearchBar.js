@@ -24,7 +24,7 @@ export const SearchBar = () => {
       });
 
       setSearch(e.target.value);
-      setUserSearch(e.target.value); // Temp save user input for setSearchValue()
+      setUserSearch(e.target.value); // Temp save user input for handleSetSearchValue()
       setCurrentSuggestions(currentSuggestions);
     } else {
       setSearch("");

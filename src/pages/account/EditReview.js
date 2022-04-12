@@ -57,7 +57,6 @@ export const EditReview = () => {
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
-        setToast("");
       }, 4000);
       return;
     }
@@ -107,7 +106,6 @@ export const EditReview = () => {
     // Hide toast after 3 seconds
     setTimeout(() => {
       setShowToast(false);
-      setToast("");
     }, 3000);
   };
 
@@ -175,7 +173,7 @@ export const EditReview = () => {
           SAVE
         </button>
       </div>
-      <CSSTransition
+      <CSSTransition // For custom toast with message
         in={showToast}
         timeout={300}
         classNames="toast-fade"

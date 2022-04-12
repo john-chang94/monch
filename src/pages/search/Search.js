@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { SearchBar } from "../../components/SearchBar";
@@ -25,7 +25,7 @@ export const Search = () => {
   // Used to search for query strings
   const location = useLocation();
   // Get query string object instance
-  const searchParams = new URLSearchParams(location.search);
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   // Get query string value of the "find" key
   const findQuery = searchParams.get("find");
   // Get query string value of the "price" key
@@ -168,6 +168,12 @@ export const Search = () => {
     fetchData();
     // Refetch when user changes search value from this component
   }, [findQuery]);
+
+  useEffect(() => {
+    searchParams.forEach((value, key) => {
+      console.log(value, key);
+    })
+  }, [searchParams])
 
   return (
     <div>

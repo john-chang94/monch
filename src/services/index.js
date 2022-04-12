@@ -1,4 +1,9 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+} from "firebase/auth";
 import {
   getDownloadURL,
   ref,
@@ -581,5 +586,27 @@ export const deleteReviewImage = async (reviewId, image) => {
     deleteFile(image);
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const updateUserPassword = async (currentPassword, newPassword) => {
+  try {
+    const user = auth.currentUser;
+    // Get user's credentials
+    const creds = EmailAuthProvider.credential(user.email, currentPassword);
+    try {
+      // Re-authenticate signed in user
+      await reauthenticateWithCredential(user, creds);
+      try {
+        // Update user's password
+        await updatePassword(user, newPassword);
+      } catch (err) {
+        throw new Error(err);
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  } catch (err) {
+    throw new Error(err.message);
   }
 };

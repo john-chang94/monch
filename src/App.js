@@ -16,6 +16,7 @@ import { AuthContextProvider } from "./contexts/AuthContext";
 import { SuggestionsContextProvider } from "./contexts/SuggestionsContext";
 import { UserReviews } from "./pages/account/UserReviews";
 import { EditReview } from "./pages/account/EditReview";
+import { NotFound } from "./components/NotFound";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                   <Route path={ROUTES.ACCOUNT} element={<Account />} />
                   <Route path={ROUTES.USER_REVIEWS} element={<UserReviews />} />
                   <Route path={ROUTES.EDIT_REVIEW} element={<EditReview />} />
+                  <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
                 </Routes>
               </div>
             </div>

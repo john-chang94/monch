@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { getUserById, updateUser } from "../../services";
+import { getUserById, updateUser, updateUserPassword } from "../../services";
 import { Link } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 
 export const AccountSettings = ({ user, setUser }) => {
   const [firstName, setFirstName] = useState("");
@@ -12,7 +13,9 @@ export const AccountSettings = ({ user, setUser }) => {
   const [showAccount, setShowAccount] = useState(true);
   const [showSecurity, setShowSecurity] = useState(false);
   const [showEditAccount, setShowEditAccount] = useState(false);
-  const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleTabClick = (tab) => {
     if (tab === "account") {
@@ -36,16 +39,21 @@ export const AccountSettings = ({ user, setUser }) => {
   const handleCancelEditAccount = () => {
     setError("");
     setShowEditAccount(false);
-  }
+  };
 
   const handleUpdateAccount = async () => {
     // Check if any inputs are empty
     if (!firstName || !lastName || !email) {
-      setError("Missing data");
+      setError(true);
+      setToast("Missing data");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
       return;
     }
     // Check if email is valid
-    if (!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email))) {
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email)) {
       setError("Invalid email");
       return;
     }
@@ -57,10 +65,39 @@ export const AccountSettings = ({ user, setUser }) => {
     const updatedUser = await getUserById(user.userId);
     setUser(updatedUser);
     setShowEditAccount(false);
-    setError("");
   };
 
-  const handleUpdatePassword = async () => {}
+  const handleUpdatePassword = async () => {
+    if (!password || !newPassword || !confirmNewPassword) {
+      setError(true);
+      setToast("Missing credentials");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return;
+    }
+    try {
+      await updateUserPassword(password, newPassword);
+      setError(false);
+      setToast("Password updated");
+      setShowToast(true);
+      setPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } catch (err) {
+      setError(true);
+      setToast(err.message);
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+  };
 
   const renderAccount = () => (
     <>
@@ -91,7 +128,10 @@ export const AccountSettings = ({ user, setUser }) => {
         </button>
       </div>
       <div className="mt-3">
-        <Link to={`/account/${user.userId}/reviews`} className="no-dec blue-darken-2">
+        <Link
+          to={`/account/${user.userId}/reviews`}
+          className="no-dec blue-darken-2"
+        >
           Manage reviews
         </Link>
       </div>
@@ -134,8 +174,9 @@ export const AccountSettings = ({ user, setUser }) => {
       </div>
       <div className="mt-5">
         <button
-        onClick={handleUpdatePassword}
-          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec">
+          onClick={handleUpdatePassword}
+          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec"
+        >
           Update
         </button>
       </div>
@@ -171,7 +212,7 @@ export const AccountSettings = ({ user, setUser }) => {
           className="form-input"
         />
       </div>
-      {error && <p className="my-2 red">{error}</p>}
+      {/* {error && <p className="my-2 red">{error}</p>} */}
       <button
         onClick={handleUpdateAccount}
         className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec mt-2"
@@ -189,6 +230,20 @@ export const AccountSettings = ({ user, setUser }) => {
 
   return (
     <div>
+      <CSSTransition // For custom toast with message
+        in={showToast}
+        timeout={300}
+        classNames="toast-fade"
+        unmountOnExit
+      >
+        <div
+          className={`toast ${
+            error ? "bg-red-accent-1" : "bg-light-blue-lighten-4"
+          }`}
+        >
+          <p>{toast}</p>
+        </div>
+      </CSSTransition>
       <div className="account-tabs">
         <div
           className="w-100 border-solid-1 py-2 pointer-no-dec hovered"
