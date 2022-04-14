@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { addReview } from "../../services";
 
 import { SpinnerCircular } from "spinners-react";
 
 import * as ROUTES from "../../constants/routes";
+import { Toast } from "../../components/Toast";
 
 export const AddReview = ({
   user,
@@ -17,7 +18,10 @@ export const AddReview = ({
   const [stars, setStars] = useState([]);
   const [rating, setRating] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const timeout = useRef(null); // For toast timeout ref
 
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
@@ -59,9 +63,14 @@ export const AddReview = ({
   };
 
   const handleSubmit = async () => {
-    // Do not run if review images reaches max limit
+    // Check for missing data in review
+    if (!rating || !details) {
+      handleSetToast(true, "Missing data");
+      return;
+    }
+    // Check if review images reached limit
     if (images.length > 6) {
-      setError("Limit of 6 images per review");
+      handleSetToast(true, "Limit of 6 images per review");
       return;
     }
 
@@ -80,24 +89,43 @@ export const AddReview = ({
 
     // Add a delay before refetching data so firebase can finish uploading images
     setTimeout(() => {
+      // Re-fetch restaurant after submitting review
       handleFetchData();
+      // Clear review form
       setDetails("");
       setRating("");
       setImages([]);
       renderEmptyStars();
       setIsSubmitting(false);
     }, images.length * 1000); // Add delay for every image that is uploaded
+  };
 
-    setError("");
+  // Set toast data and toggle
+  const handleSetToast = (isError, text) => {
+    setIsError(isError);
+    setToast(text);
+    setShowToast(true);
+    timeout.current = setTimeout(
+      () => {
+        setShowToast(false);
+        // Display toast for 5 secs if error, otherwise 3 secs
+      },
+      isError ? 5000 : 3000
+    );
   };
 
   useEffect(() => {
     renderEmptyStars();
+
+    // // Clear timeout for toast if user navigates away before it ends
+    return () => clearTimeout(timeout.current);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="w-100 bg-grey-lighten-3">
+      <Toast toast={toast} showToast={showToast} isError={isError} />
       {user ? (
         <div className="p-2">
           {userHasReview ? (
@@ -155,7 +183,6 @@ export const AddReview = ({
               >
                 SUBMIT
               </button>
-              {error && <p className="red">{error}</p>}
             </div>
           )}
         </div>

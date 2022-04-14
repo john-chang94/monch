@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { register } from "../../services";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
 import * as ROUTES from "../../constants/routes";
+import { Toast } from "../../components/Toast";
 
 export const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -12,7 +13,10 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [toast, setToast] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const timeout = useRef(null); // For toast timeout ref
 
   const { activeUser } = useAuth();
   const navigate = useNavigate();
@@ -21,11 +25,18 @@ export const Register = () => {
     e.preventDefault();
     // Return error is form is incomplete
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
-      return setError("Missing entries");
+      handleSetToast(true, "Missing data");
+      return;
+    }
+    // Return error if email is invalid
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email)) {
+      handleSetToast(true, "Invalid email");
+      return;
     }
     // Return error is passwords to not match
     if (password !== confirmPassword) {
-      return setError("Passwords do not match");
+      handleSetToast(true, "Passwords do not match");
+      return;
     }
 
     let user = { firstName, lastName, email };
@@ -35,14 +46,37 @@ export const Register = () => {
     navigate(ROUTES.HOME);
   };
 
+  // Set toast data and toggle
+  const handleSetToast = (isError, text) => {
+    setIsError(isError);
+    setToast(text);
+    setShowToast(true);
+    timeout.current = setTimeout(
+      () => {
+        setShowToast(false);
+        // Display toast for 5 secs if error, otherwise 3 secs
+      },
+      isError ? 5000 : 3000
+    );
+  };
+
   useEffect(() => {
     // If a user is signed in, do not show this component
     if (activeUser) navigate(ROUTES.HOME);
   }, [activeUser]);
 
+  // Clear timeout for toast if user navigates away before it ends
+  useEffect(() => {
+    return () => clearTimeout(timeout.current);
+  }, []);
+
   return (
     <div>
-      <form onSubmit={handleRegister} className="flex flex-col align-center mt-5">
+      <Toast toast={toast} showToast={showToast} isError={isError} />
+      <form
+        onSubmit={handleRegister}
+        className="flex flex-col align-center mt-5"
+      >
         <div className="flex flex-col mb-1 w-80">
           <label htmlFor="firstName">First Name</label>
           <input
@@ -93,17 +127,16 @@ export const Register = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        <button
-          className="btn-med grey-lighten-4 bg-green-darken-3 my-4"
-        >
+        <button className="btn-med grey-lighten-4 bg-green-darken-3 my-4 pointer">
           Register
         </button>
       </form>
-      {error && <p className="red">{error}</p>}
       <div className="text-center">
         <p>Have an account?</p>
-        <Link to={ROUTES.SIGN_IN} className="blue-darken-2 no-dec pointer">Sign in here</Link>
+        <Link to={ROUTES.SIGN_IN} className="blue-darken-2 no-dec pointer">
+          Sign in here
+        </Link>
       </div>
     </div>
   );
-}
+};

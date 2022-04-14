@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   addReviewImage,
@@ -23,6 +23,7 @@ export const EditReview = () => {
   const [toast, setToast] = useState(""); // Toast content
   const [showToast, setShowToast] = useState(false);
   const [isError, setIsError] = useState(null); // Determine bg color of toast
+  const timeout = useRef(null); // For toast timeout ref
 
   const { userId, reviewId } = useParams();
 
@@ -103,7 +104,7 @@ export const EditReview = () => {
     setIsError(isError);
     setToast(text);
     setShowToast(true);
-    setTimeout(
+    timeout.current = setTimeout(
       () => {
         setShowToast(false);
         // Display toast for 5 secs if error, otherwise 3 secs
@@ -112,6 +113,7 @@ export const EditReview = () => {
     );
   };
 
+  // Render initial rating from current review
   const renderInitialStars = (rating) => {
     const filled = "fas fa-star yellow-darken-2 pointer-no-dec";
     const empty = "far fa-star yellow-darken-2 pointer-no-dec";
@@ -119,7 +121,6 @@ export const EditReview = () => {
     for (let i = 0; i < 5; i++) {
       stars.push(
         <i
-          // Render initial rating using state from location
           className={rating >= i ? filled : empty}
           key={i}
           onClick={() => handleRating(i)}
@@ -141,7 +142,11 @@ export const EditReview = () => {
     }
 
     fetchData();
-  }, []);
+
+    // Clear timeout for toast if user navigates away before it ends
+    return () => clearTimeout(timeout.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviewId]);
 
   return isLoading ? (
     <div className="my-1 text-center">

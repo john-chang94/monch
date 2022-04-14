@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getUserById, updateUser, updateUserPassword } from "../../services";
 import { Link } from "react-router-dom";
 import { Toast } from "../../components/Toast";
@@ -16,6 +16,7 @@ export const AccountSettings = ({ user, setUser }) => {
   const [toast, setToast] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [isError, setIsError] = useState(false);
+  const timeout = useRef(null); // For toast timeout ref
 
   const handleTabClick = (tab) => {
     if (tab === "account") {
@@ -84,7 +85,7 @@ export const AccountSettings = ({ user, setUser }) => {
     setIsError(isError);
     setToast(text);
     setShowToast(true);
-    setTimeout(
+    timeout.current = setTimeout(
       () => {
         setShowToast(false);
         // Display toast for 5 secs if error, otherwise 3 secs
@@ -220,6 +221,11 @@ export const AccountSettings = ({ user, setUser }) => {
       </button>
     </>
   );
+
+  // Clear timeout for toast if user navigates away before it ends
+  useEffect(() => {
+    return () => clearTimeout(timeout.current);
+  }, []);
 
   return (
     <div>
