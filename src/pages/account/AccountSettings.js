@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getUserById, updateUser, updateUserPassword } from "../../services";
 import { Link } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
+import { Toast } from "../../components/Toast";
 
 export const AccountSettings = ({ user, setUser }) => {
   const [firstName, setFirstName] = useState("");
@@ -15,12 +15,15 @@ export const AccountSettings = ({ user, setUser }) => {
   const [showEditAccount, setShowEditAccount] = useState(false);
   const [toast, setToast] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleTabClick = (tab) => {
     if (tab === "account") {
       setShowAccount(true);
       setShowSecurity(false);
+      setPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
     }
     if (tab === "security") {
       setShowSecurity(true);
@@ -36,25 +39,15 @@ export const AccountSettings = ({ user, setUser }) => {
     setShowEditAccount(true);
   };
 
-  const handleCancelEditAccount = () => {
-    setError("");
-    setShowEditAccount(false);
-  };
-
   const handleUpdateAccount = async () => {
     // Check if any inputs are empty
     if (!firstName || !lastName || !email) {
-      setError(true);
-      setToast("Missing data");
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      handleSetToast(true, "Missing data");
       return;
     }
     // Check if email is valid
     if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email)) {
-      setError("Invalid email");
+      handleSetToast(true, "Invalid email");
       return;
     }
 
@@ -69,34 +62,35 @@ export const AccountSettings = ({ user, setUser }) => {
 
   const handleUpdatePassword = async () => {
     if (!password || !newPassword || !confirmNewPassword) {
-      setError(true);
-      setToast("Missing credentials");
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      handleSetToast(true, "Missing credentials");
+      return;
+    } else if (newPassword !== confirmNewPassword) {
+      handleSetToast(true, "New password does not match");
       return;
     }
     try {
       await updateUserPassword(password, newPassword);
-      setError(false);
-      setToast("Password updated");
-      setShowToast(true);
+      handleSetToast(false, "Password updated");
       setPassword("");
       setNewPassword("");
       setConfirmNewPassword("");
-      // Hide toast after 3 seconds
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
     } catch (err) {
-      setError(true);
-      setToast(err.message);
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      handleSetToast(true, err.message);
     }
+  };
+
+  // Set toast data and toggle
+  const handleSetToast = (isError, text) => {
+    setIsError(isError);
+    setToast(text);
+    setShowToast(true);
+    setTimeout(
+      () => {
+        setShowToast(false);
+        // Display toast for 5 secs if error, otherwise 3 secs
+      },
+      isError ? 5000 : 3000
+    );
   };
 
   const renderAccount = () => (
@@ -212,7 +206,6 @@ export const AccountSettings = ({ user, setUser }) => {
           className="form-input"
         />
       </div>
-      {/* {error && <p className="my-2 red">{error}</p>} */}
       <button
         onClick={handleUpdateAccount}
         className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec mt-2"
@@ -220,7 +213,7 @@ export const AccountSettings = ({ user, setUser }) => {
         Save
       </button>
       <button
-        onClick={handleCancelEditAccount}
+        onClick={() => setShowEditAccount(false)}
         className="btn-med pointer-no-dec ml-5"
       >
         Cancel
@@ -230,20 +223,7 @@ export const AccountSettings = ({ user, setUser }) => {
 
   return (
     <div>
-      <CSSTransition // For custom toast with message
-        in={showToast}
-        timeout={300}
-        classNames="toast-fade"
-        unmountOnExit
-      >
-        <div
-          className={`toast ${
-            error ? "bg-red-accent-1" : "bg-light-blue-lighten-4"
-          }`}
-        >
-          <p>{toast}</p>
-        </div>
-      </CSSTransition>
+      <Toast toast={toast} showToast={showToast} isError={isError} />
       <div className="account-tabs">
         <div
           className="w-100 border-solid-1 py-2 pointer-no-dec hovered"

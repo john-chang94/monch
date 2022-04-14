@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
 import {
   addReviewImage,
   deleteReviewImage,
@@ -9,18 +8,19 @@ import {
 } from "../../services";
 
 import { SpinnerCircular } from "spinners-react";
+import { Toast } from "../../components/Toast";
 
 export const EditReview = () => {
   const [review, setReview] = useState(null);
   const [details, setDetails] = useState("");
   const [rating, setRating] = useState(0);
   const [stars, setStars] = useState([]);
-  const [toast, setToast] = useState(""); // Toast content
   const [imageIndex, setImageIndex] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [toast, setToast] = useState(""); // Toast content
   const [showToast, setShowToast] = useState(false);
   const [isError, setIsError] = useState(null); // Determine bg color of toast
 
@@ -52,12 +52,7 @@ export const EditReview = () => {
   const handleAddImage = async (image) => {
     // Do not run if review images reaches max limit
     if (review.images.length === 6) {
-      setToast("Limit of 6 images per review");
-      setIsError(true);
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 4000);
+      handleSetToast(true, "Limit of 6 images per review");
       return;
     }
 
@@ -100,13 +95,21 @@ export const EditReview = () => {
 
     setReview(updated);
     setIsUpdating(false);
-    setToast("Saved!");
-    setIsError(false);
+    handleSetToast(false, "Saved");
+  };
+
+  // Set toast data and toggle
+  const handleSetToast = (isError, text) => {
+    setIsError(isError);
+    setToast(text);
     setShowToast(true);
-    // Hide toast after 3 seconds
-    setTimeout(() => {
-      setShowToast(false);
-    }, 3000);
+    setTimeout(
+      () => {
+        setShowToast(false);
+        // Display toast for 5 secs if error, otherwise 3 secs
+      },
+      isError ? 5000 : 3000
+    );
   };
 
   const renderInitialStars = (rating) => {
@@ -146,6 +149,7 @@ export const EditReview = () => {
     </div>
   ) : (
     <div>
+      <Toast toast={toast} showToast={showToast} isError={isError} />
       <div className="my-2">
         <Link
           to={`/account/${userId}/reviews`}
@@ -173,16 +177,6 @@ export const EditReview = () => {
           SAVE
         </button>
       </div>
-      <CSSTransition // For custom toast with message
-        in={showToast}
-        timeout={300}
-        classNames="toast-fade"
-        unmountOnExit
-      >
-        <div className={`toast ${isError ? "bg-red-accent-1" : "bg-light-blue-lighten-4"}`}>
-          <p>{toast}</p>
-        </div>
-      </CSSTransition>
       <hr className="my-2" />
       <div>
         {isUploading ? (
