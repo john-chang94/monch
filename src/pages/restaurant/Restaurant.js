@@ -27,21 +27,24 @@ export const Restaurant = () => {
   const { activeUser } = useAuth();
 
   const handleFetchData = async () => {
-    const user = await getUserById(activeUser.uid);
     const restaurant = await getRestaurant(restaurantId);
     const reviews = await getReviews(restaurantId);
     const reviewImages = await getRestaurantReviewImages(restaurantId);
-
-    // Check if signed in user posted a review for the restaurant
-    if (user) {
+    
+    // Check if a user is signed in
+    if (activeUser) {
+      const user = await getUserById(activeUser.uid);
+      // Check if user posted a review for current restaurant
       const hasReview = reviews.filter((review) => {
         return user.userId === review.userId;
       });
+      // Set to disable review form if user already posted a review
       if (hasReview.length) {
         setUserHasReview(true);
       }
     }
 
+    // Render restaurant review images, if any
     if (reviewImages) {
       let images = [];
       for (let i = 0; i < reviewImages.length; i++) {

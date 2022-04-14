@@ -6,9 +6,12 @@ import {
   getReviewById,
   updateReview,
 } from "../../services";
+import { useNavigate } from "react-router-dom";
+import * as ROUTES from "../../constants/routes";
 
 import { SpinnerCircular } from "spinners-react";
 import { Toast } from "../../components/Toast";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const EditReview = () => {
   const [review, setReview] = useState(null);
@@ -26,6 +29,8 @@ export const EditReview = () => {
   const timeout = useRef(null); // For toast timeout ref
 
   const { userId, reviewId } = useParams();
+  const { activeUser } = useAuth();
+  const navigate = useNavigate();
 
   // Fills in stars based on what user clicks
   const handleRating = (starIndex) => {
@@ -132,6 +137,11 @@ export const EditReview = () => {
   };
 
   useEffect(() => {
+    if (!activeUser) {
+      navigate(ROUTES.HOME);
+      return;
+    }
+
     async function fetchData() {
       const review = await getReviewById(reviewId);
       setReview(review);
@@ -145,7 +155,7 @@ export const EditReview = () => {
 
     // Clear timeout for toast if user navigates away before it ends
     return () => clearTimeout(timeout.current);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewId]);
 
   return isLoading ? (
