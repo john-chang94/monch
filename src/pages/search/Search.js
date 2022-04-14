@@ -169,12 +169,6 @@ export const Search = () => {
     // Refetch when user changes search value from this component
   }, [findQuery]);
 
-  useEffect(() => {
-    searchParams.forEach((value, key) => {
-      console.log(value, key);
-    })
-  }, [searchParams])
-
   return (
     <div>
       <SearchBar />

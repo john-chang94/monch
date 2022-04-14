@@ -80,42 +80,9 @@ export const updateUser = async (docId, body) => {
   await updateDoc(userRef, body);
 };
 
-// export const addToFirebase = async () => {
-//   try {
-//     let rest = []
-//     const docs = await getDocs(collection(db, "restaurants"));
-//     docs.forEach(async (res) => {
-//       // await updateDoc(doc(db, "restaurants", res.id), {
-//       //   rating: 0,
-//       // });
-//       rest.push(res.data())
-//     });
-
-//     let arr = [];
-//       for (let i = 0; i < rest.length; i++) {
-//         // for (let j = 0; j < rest[i].categories.length; j++) {
-//           // let obj = rest[i].categories[j];
-//           let obj = rest[i].name;
-//           arr.push(obj);
-//           // const doc = await addDoc(collection(db, "suggestions"), obj);
-//           // console.log(doc.id);
-//         // }
-//       }
-
-//       const set = new Set(arr);
-//       set.forEach(async item => {
-//         const doc = await addDoc(collection(db, "suggestions"), {query: item});
-//         console.log(doc.id);
-//       })
-
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
 // Get all restaurants
 export const getRestaurants = async () => {
-  console.log("GET RESTAURANTS");
+  // console.log("GET RESTAURANTS");
   try {
     let restaurants = [];
     const restaurantsRef = collection(db, "restaurants");
@@ -136,7 +103,7 @@ export const getRestaurants = async () => {
 };
 
 export const getRestaurant = async (restaurantId) => {
-  console.log("GET RESTAURANT");
+  // console.log("GET RESTAURANT");
   try {
     // Get restaurant
     const restaurantRef = doc(db, "restaurants", restaurantId);
@@ -156,7 +123,7 @@ export const getRestaurant = async (restaurantId) => {
 };
 
 export const getReviews = async (restaurantId) => {
-  console.log("GET REVIEWS");
+  // console.log("GET REVIEWS");
   try {
     let reviews = [];
     const reviewsRef = collection(db, "reviews");
@@ -178,7 +145,7 @@ export const getReviews = async (restaurantId) => {
 };
 
 export const getReviewsByUser = async (userId) => {
-  console.log("GET REVIEWS BY USER");
+  // console.log("GET REVIEWS BY USER");
   try {
     let reviews = [];
     const reviewsRef = collection(db, "reviews");
@@ -200,7 +167,7 @@ export const getReviewsByUser = async (userId) => {
 
 export const getReviewById = async (docId) => {
   try {
-    console.log("GET REVIEW BY ID");
+    // console.log("GET REVIEW BY ID");
     const reviewRef = doc(db, "reviews", docId);
     const reviewSnap = await getDoc(reviewRef);
     const review = { ...reviewSnap.data() };
@@ -212,7 +179,7 @@ export const getReviewById = async (docId) => {
 };
 
 export const getRestaurantReviewImages = async (restaurantId) => {
-  console.log("GET RESTAURANT REVIEW IMAGES");
+  // console.log("GET RESTAURANT REVIEW IMAGES");
   try {
     let images = [];
     const imagesRef = collection(db, "reviewImages");
@@ -235,7 +202,7 @@ export const getRestaurantReviewImages = async (restaurantId) => {
 
 // Get suggestions for search input
 export const getSuggestions = async () => {
-  console.log("GET SUGGESTIONS");
+  // console.log("GET SUGGESTIONS");
   try {
     let suggestions = [];
     const suggestionsRef = collection(db, "suggestions");
@@ -255,7 +222,7 @@ export const getSuggestions = async () => {
 };
 
 export const getSearchResults = async (search) => {
-  console.log("GET SEARCH RESULTS");
+  // console.log("GET SEARCH RESULTS");
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
@@ -290,7 +257,7 @@ export const getSearchResults = async (search) => {
 };
 
 export const getPriceFilteredResults = async (search, price) => {
-  console.log("GET PRICE FILTERED RESULTS");
+  // console.log("GET PRICE FILTERED RESULTS");
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
@@ -330,7 +297,7 @@ export const getPriceFilteredResults = async (search, price) => {
 };
 
 export const getRatingFilteredResults = async (search, rating) => {
-  console.log("GET RATING FILTERED RESULTS");
+  // console.log("GET RATING FILTERED RESULTS");
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
@@ -376,7 +343,7 @@ export const getPriceAndRatingFilteredResults = async (
   price,
   rating
 ) => {
-  console.log("GET PRICE AND RATING FILTERED RESULTS");
+  // console.log("GET PRICE AND RATING FILTERED RESULTS");
   try {
     let results = [];
     const restaurantsRef = collection(db, "restaurants");
