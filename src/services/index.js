@@ -61,7 +61,7 @@ export const register = async (user, email, password) => {
 
 // Use getDocs instead of getDoc because we don't have the actual user docId
 export const getUserById = async (userId) => {
-  console.log("GET USER BY ID");
+  // console.log("GET USER BY ID");
   const usersRef = collection(db, "users");
   const q = query(usersRef, where("userId", "==", userId));
 
