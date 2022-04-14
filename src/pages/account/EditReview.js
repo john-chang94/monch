@@ -18,8 +18,6 @@ export const EditReview = () => {
   const [details, setDetails] = useState("");
   const [rating, setRating] = useState(0);
   const [stars, setStars] = useState([]);
-  const [imageIndex, setImageIndex] = useState(null);
-  const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -67,8 +65,6 @@ export const EditReview = () => {
     const updated = await getReviewById(reviewId);
 
     setReview(updated);
-    setIsHovered(false);
-    setImageIndex(null);
     setIsUploading(false);
   };
 
@@ -82,16 +78,8 @@ export const EditReview = () => {
       setReview(updated);
       setIsUploading(false);
     } else {
-      setIsHovered(false);
-      setImageIndex(null);
       setIsUploading(false);
     }
-  };
-
-  // Handle css change when user hovers mouse over image to delete
-  const handleIsHovered = (imageIndex, isHovered) => {
-    setIsHovered(isHovered);
-    setImageIndex(imageIndex);
   };
 
   const handleUpdateReview = async () => {
@@ -205,27 +193,13 @@ export const EditReview = () => {
                 review?.images.map((image, image_i) => (
                   <div
                     key={image_i}
-                    className="relative xs12 s6 m4 l2"
-                    onMouseOver={() => handleIsHovered(image_i, true)}
-                    onMouseOut={() => handleIsHovered(image_i, false)}
+                    className="edit-img relative xs12 s6 m4 l2"
                     onClick={() => handleDeleteImage(image)}
                   >
-                    <p
-                      className={`${
-                        isHovered && image_i === imageIndex
-                          ? "delete-img"
-                          : "hide"
-                      }`}
-                    >
+                    <p className="delete-img">
                       <i className="fas fa-times" />
                     </p>
-                    <img
-                      src={image}
-                      alt="user review"
-                      className={`w-100 ${
-                        isHovered && image_i === imageIndex && "fade-half"
-                      }`}
-                    />
+                    <img src={image} alt="user review" className="w-100" />
                   </div>
                 ))}
             </div>
