@@ -10,7 +10,7 @@ export const Reviews = ({ reviews, isUser }) => (
           <p>{renderStars(review.rating)}</p>
           <p>{review.details}</p>
           <br />
-          <div className="flex">
+          <div className="flex flex-wrap">
             {review.images &&
               review.images.map((image, image_i) => (
                 <div key={image_i}>

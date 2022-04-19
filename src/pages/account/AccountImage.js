@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { deleteUserImage, getUserById, updateUserImage } from "../../services";
 
@@ -7,6 +7,7 @@ import { SpinnerCircular } from "spinners-react";
 export const AccountImage = ({ user, setUser }) => {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const modalRef = useRef();
 
   const handleUpdateImage = async (e) => {
     setIsLoading(true);
@@ -46,8 +47,9 @@ export const AccountImage = ({ user, setUser }) => {
         timeout={300}
         classNames="modal-fade"
         unmountOnExit
+        nodeRef={modalRef}
       >
-        <div>
+        <div ref={modalRef}>
           <div
             className="modal-container"
             onClick={() => setShowModal(false)}
