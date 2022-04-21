@@ -88,7 +88,7 @@ export const AccountSettings = ({ user, setUser }) => {
     timeout.current = setTimeout(
       () => {
         setShowToast(false);
-        // Display toast for 5 secs if error, otherwise 3 secs
+        // Render toast for 5 secs if error, otherwise 3 secs
       },
       isError ? 5000 : 3000
     );
@@ -245,12 +245,15 @@ export const AccountSettings = ({ user, setUser }) => {
         </div>
       </div>
       {
-        // Display account tab or security tab
+        // Render account tab
         showAccount &&
-          // Display account details or edit account details
+          // Render account details or edit account details
           (showEditAccount ? renderEditAccount() : renderAccount())
       }
-      {showSecurity && renderSecurity()}
+      {
+        // Render security tab
+        showSecurity && renderSecurity()
+      }
     </div>
   );
 };

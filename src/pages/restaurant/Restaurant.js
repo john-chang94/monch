@@ -34,11 +34,13 @@ export const Restaurant = () => {
     // Check if a user is signed in
     if (activeUser) {
       const user = await getUserById(activeUser.uid);
+      setUser(user);
       // Check if user posted a review for current restaurant
+      // Checked with uid, not user's doc id
       const hasReview = reviews.filter((review) => {
         return user.userId === review.userId;
       });
-      // Set to disable review form if user already posted a review
+      // Disable review form if user already posted a review
       if (hasReview.length) {
         setUserHasReview(true);
       }
@@ -56,7 +58,6 @@ export const Restaurant = () => {
       setReviewImages(images);
     }
 
-    setUser(user);
     setRestaurant(restaurant);
     setReviews(reviews);
     setIsLoading(false);

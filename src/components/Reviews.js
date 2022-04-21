@@ -28,7 +28,7 @@ export const Reviews = ({ reviews, isUser }) => (
             </p>
           )}
           <p>Date: {new Date(review.date).toLocaleDateString()}</p>
-          {isUser && ( // Display edit button if location is user account
+          {isUser && ( // Render edit button if location is user account
             <Link
               to={`/account/${review.userId}/reviews/${review.docId}`}
               state={review}

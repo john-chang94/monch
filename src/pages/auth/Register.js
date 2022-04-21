@@ -54,7 +54,7 @@ export const Register = () => {
     timeout.current = setTimeout(
       () => {
         setShowToast(false);
-        // Display toast for 5 secs if error, otherwise 3 secs
+        // Render toast for 5 secs if error, otherwise 3 secs
       },
       isError ? 5000 : 3000
     );
