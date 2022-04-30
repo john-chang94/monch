@@ -36,7 +36,11 @@ export const SignIn = () => {
       // Redirect to home after sign in
       navigate(ROUTES.HOME);
     } catch (err) {
-      handleSetToast(true, err.message);
+      // Render error message only
+      const errStart = err.message.indexOf("(");
+      const errEnd = err.message.indexOf(")");
+      const errStr = err.message.substring(errStart + 1, errEnd);
+      handleSetToast(true, errStr);
     }
   };
 
