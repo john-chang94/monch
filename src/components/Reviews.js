@@ -1,5 +1,5 @@
 import React from "react";
-import { renderStars } from "../helpers";
+import { renderStars, capitalizeFirstLetter } from "../helpers";
 import { Link } from "react-router-dom";
 
 export const Reviews = ({ reviews, isUser }) => (
@@ -7,6 +7,9 @@ export const Reviews = ({ reviews, isUser }) => (
     {reviews.length > 0 ? (
       reviews.map((review, i) => (
         <div key={i} className="review p-2 my-2 bg-grey-lighten-3">
+          {isUser && (
+            <h4>{capitalizeFirstLetter(review.restaurantName)}</h4>
+          )}
           <p>{renderStars(review.rating)}</p>
           <p>{review.details}</p>
           <br />
