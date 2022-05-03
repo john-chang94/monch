@@ -88,6 +88,15 @@ export const SearchBar = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursor]);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const findQuery = searchParams.get("find");
+    // Set search value in search bar
+    if (findQuery) setSearch(findQuery);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.location.search])
+
   return (
     <div className="search-bar-container">
       <input
