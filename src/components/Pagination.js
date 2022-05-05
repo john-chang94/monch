@@ -18,7 +18,7 @@ export const Pagination = ({
           <li
             key={i}
             onClick={() => handlePaginate(number)}
-            className="py-2 px-3 pointer border-solid-1"
+            className="py-1 px-2 mx-1 pointer border-solid-1 border-smooth"
           >
             {number}
           </li>

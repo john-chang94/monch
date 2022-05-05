@@ -93,7 +93,8 @@ header {
 
 .main-img p {
   position: absolute;
-  color: white;
+  color: rgb(242, 242, 242);
+  font-family: 'Raleway', sans-serif;
   font-size: calc(14px + 2vmin);
   left: 0;
   right: 0;

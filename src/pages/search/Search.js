@@ -49,7 +49,6 @@ export const Search = () => {
       case "price":
         // Run if value is provided
         if (value) {
-          // Run if query string is not already in URL
           if (priceQuery) {
             // Set query string value in URL
             searchParams.set(key, value);
@@ -58,12 +57,11 @@ export const Search = () => {
             searchParams.append(key, value);
           }
         }
-        // Else, run if no value is provided
+        // Remove query string if no value is provided
         else {
           searchParams.delete(key);
         }
         break;
-
       // Same concept as above
       case "rating":
         if (value) {
