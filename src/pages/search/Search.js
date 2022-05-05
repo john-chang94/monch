@@ -24,11 +24,8 @@ export const Search = () => {
 
   // Used for init load
   const searchParams = new URLSearchParams(window.location.search);
-  // Get query string value of the "find" key
   const findQuery = searchParams.get("find");
-  // Get query string value of the "price" key
   const priceQuery = searchParams.get("price");
-  // Get query string value of the "rating" key
   const ratingQuery = searchParams.get("rating");
 
   // Indexes to keep track of pagination
@@ -78,28 +75,26 @@ export const Search = () => {
         break;
     }
 
-    // Navigate to the new search address to trigger useEffect that fetches data
+    // Navigate to the new search address to trigger re-fetch
     navigate(`/search?${searchParams}`);
-    handleFetchData();
+    handleQuerySearch();
   };
 
-  const handleFetchData = async () => {
-    const searchQuery = new URLSearchParams(window.location.search);
+  const handleQuerySearch = async () => {
     setIsLoading(true);
-    // Get query string value of the "find" key
-    const findQuery = searchQuery.get("find");
-    // Get query string value of the "price" key
-    const priceQuery = searchQuery.get("price");
-    // Get query string value of the "rating" key
-    const ratingQuery = searchQuery.get("rating");
+    // Get query strings
+    const searchParams = new URLSearchParams(window.location.search);
+    const findQuery = searchParams.get("find");
+    const priceQuery = searchParams.get("price");
+    const ratingQuery = searchParams.get("rating");
 
     let results;
     // Fetch filtered results based on what params exist
     if (findQuery && priceQuery && ratingQuery) {
       results = await getPriceAndRatingFilteredResults(
         findQuery,
-        searchQuery.get("price"),
-        searchQuery.get("rating")
+        priceQuery,
+        ratingQuery
       );
     } else if (findQuery && priceQuery) {
       results = await getPriceFilteredResults(findQuery, priceQuery);
@@ -115,8 +110,8 @@ export const Search = () => {
 
   // Fetch data whenever search params are updated
   useEffect(() => {
-    handleFetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    handleQuerySearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.location.search]);
 
   return (

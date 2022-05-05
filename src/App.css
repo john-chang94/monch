@@ -24,7 +24,6 @@ html, body {
 
 .hovered:hover {
   background-color:rgba(0, 0, 0, 0.12);
-  /* opacity: .85; */
 }
 
 header {
