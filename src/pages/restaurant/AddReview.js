@@ -9,6 +9,7 @@ import { Toast } from "../../components/Toast";
 
 export const AddReview = ({
   user,
+  restaurant,
   restaurantId,
   userHasReview,
   handleFetchData,
@@ -79,6 +80,7 @@ export const AddReview = ({
       rating,
       details,
       restaurantId,
+      restaurantName: restaurant.name,
       userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,

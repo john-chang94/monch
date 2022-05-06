@@ -79,6 +79,7 @@ export const Restaurant = () => {
       <hr className="my-4" />
       <AddReview
         user={user}
+        restaurant={restaurant}
         restaurantId={restaurantId}
         userHasReview={userHasReview}
         handleFetchData={handleFetchData}

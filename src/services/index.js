@@ -149,7 +149,7 @@ export const getReviewsByUser = async (userId) => {
   try {
     let reviews = [];
     const reviewsRef = collection(db, "reviews");
-    const q = query(reviewsRef, where("userId", "==", userId));
+    const q = query(reviewsRef, where("userId", "==", userId), orderBy("date", "desc"));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       let obj = {
@@ -460,7 +460,7 @@ export const addReview = async (review, images) => {
   try {
     // Add review to firestore
     const addedReview = await addDoc(collection(db, "reviews"), review);
-    // Update restaurant total ratings
+    // Get restaurant to update rating at the end
     const restaurantRef = doc(db, "restaurants", review.restaurantId);
     const restaurantSnap = await getDoc(restaurantRef);
     const restaurantDoc = restaurantSnap.data();
@@ -512,6 +512,25 @@ export const updateReview = async (reviewId, rating, details) => {
   }
 };
 
+export const deleteReview = async (reviewId) => {
+  try {
+    const reviewRef = doc(db, "reviews", reviewId);
+    const reviewSnap = await getDoc(reviewRef);
+    const reviewDoc = reviewSnap.data();
+
+    // Delete review images, if any
+    if (reviewDoc.images.length > 0) {
+      for (let i = 0; i < reviewDoc.images.length; i++) {
+        await deleteReviewImage(reviewId, reviewDoc.images[i]);
+      }
+    }
+    // Delete review
+    await deleteDoc(reviewRef);
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 export const addReviewImage = async (reviewId, restaurantId, image) => {
   try {
     // Upload image file to firebase
@@ -533,6 +552,7 @@ export const addReviewImage = async (reviewId, restaurantId, image) => {
   }
 };
 
+// Delete image from storage and firestore
 export const deleteReviewImage = async (reviewId, image) => {
   try {
     // Delete image from review

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   addReviewImage,
+  deleteReview,
   deleteReviewImage,
   getReviewById,
   updateReview,
@@ -21,6 +22,7 @@ export const EditReview = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [toast, setToast] = useState(""); // Toast content
   const [showToast, setShowToast] = useState(false);
   const [isError, setIsError] = useState(null); // Determine bg color of toast
@@ -90,6 +92,17 @@ export const EditReview = () => {
     setReview(updated);
     setIsUpdating(false);
     handleSetToast(false, "Saved");
+  };
+
+  const handleDeleteReview = async () => {
+    const doDelete = window.confirm("Delete review?");
+    if (doDelete) {
+      setIsDeleting(true);
+      await deleteReview(reviewId);
+
+      setIsDeleting(false);
+      navigate(`/account/${userId}/reviews`);
+    }
   };
 
   // Set toast data and toggle
@@ -168,14 +181,14 @@ export const EditReview = () => {
           onChange={(e) => setDetails(e.target.value)}
           rows={5}
           className="my-1"
-          disabled={isUpdating}
+          disabled={isUpdating || isDeleting}
         />
       </div>
       <div>
         <button
           className="btn-sm grey-lighten-4 bg-green-darken-3 pointer-no-dec"
           onClick={handleUpdateReview}
-          disabled={isUpdating}
+          disabled={isUpdating || isDeleting}
         >
           SAVE
         </button>
@@ -210,10 +223,20 @@ export const EditReview = () => {
                 type="file"
                 name="images"
                 onChange={(e) => handleAddImage(e.target.files[0])}
+                disabled={isDeleting}
               />
             </div>
           </>
         )}
+      </div>
+      <div className="mt-8 text-center">
+        <button
+          className={`btn-sm bg-red grey-lighten-3 ${!isDeleting && "pointer-no-dec"}`}
+          onClick={handleDeleteReview}
+          disabled={isDeleting}
+        >
+          DELETE
+        </button>
       </div>
     </div>
   );

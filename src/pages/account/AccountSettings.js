@@ -16,6 +16,7 @@ export const AccountSettings = ({ user, setUser }) => {
   const [toast, setToast] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const timeout = useRef(null); // For toast timeout ref
 
   const handleTabClick = (tab) => {
@@ -70,11 +71,13 @@ export const AccountSettings = ({ user, setUser }) => {
       return;
     }
     try {
+      setIsUpdating(true);
       await updateUserPassword(password, newPassword);
       handleSetToast(false, "Password updated");
       setPassword("");
       setNewPassword("");
       setConfirmNewPassword("");
+      setIsUpdating(false);
     } catch (err) {
       // Render error message only
       const errStart = err.message.indexOf("(");
@@ -174,7 +177,8 @@ export const AccountSettings = ({ user, setUser }) => {
       <div className="mt-5">
         <button
           onClick={handleUpdatePassword}
-          className="btn-med grey-lighten-4 bg-green-darken-3 pointer-no-dec"
+          className={`btn-med grey-lighten-4 bg-green-darken-3 ${!isUpdating && "pointer-no-dec"}`}
+          disabled={isUpdating}
         >
           Update
         </button>
