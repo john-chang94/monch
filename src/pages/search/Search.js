@@ -47,7 +47,7 @@ export const Search = () => {
         // Run if value is provided
         if (value) {
           if (priceQuery) {
-            // Set query string value in URL
+            // Update query string value in URL
             searchParams.set(key, value);
           } else {
             // Append query string in URL
